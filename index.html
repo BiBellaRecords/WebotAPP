@@ -1,0 +1,1086 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#090D1A">
+<title>Webot IA — App Concept</title>
+<style>
+:root{
+  --bg:#050505; --panel:#0C0C0C; --panel2:#111111; --card:#151515;
+  --text:#FFFFFF; --muted:#A7A7A7; --line:rgba(255,255,255,.10);
+  --red:#E50914; --red2:#FF2A35; --redSoft:rgba(229,9,20,.12); --white:#FFF;
+  --success:#37D67A; --warn:#FFB648; --shadow:0 18px 55px rgba(0,0,0,.45); --radius:22px;
+  --ease:cubic-bezier(.2,.8,.2,1);
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+body{min-height:100vh;overflow-x:hidden}
+button,input,select,textarea{font:inherit}button{cursor:pointer;border:0}.hidden{display:none!important}
+.app-shell{min-height:100vh;position:relative;overflow:hidden}.bg-orb{display:none}.screen{position:relative;z-index:1;min-height:100vh}.center{display:flex;align-items:center;justify-content:center}
+.splash{padding:24px;background:radial-gradient(circle at 50% 0,rgba(229,9,20,.16),transparent 40%),#050505}
+.brand-lockup{display:flex;align-items:center;gap:12px}.logo{width:52px;height:52px;border-radius:16px;background:var(--red);display:grid;place-items:center;box-shadow:0 14px 34px rgba(229,9,20,.28);position:relative}.logo:before{content:"";width:24px;height:24px;border-radius:8px;background:#fff}.logo:after{content:"W";position:absolute;color:var(--red);font-weight:1000;font-size:14px}.brand h1{margin:0;font-size:22px;letter-spacing:-.8px}.brand small{color:var(--muted)}
+.splash-panel{width:min(460px,100%);padding:28px;border:1px solid rgba(255,255,255,.12);background:linear-gradient(180deg,#111,#090909);border-radius:28px;box-shadow:var(--shadow);animation:floatIn .7s var(--ease)}
+.splash-mark{margin:28px 0 18px;display:flex;justify-content:center}.splash-core{width:122px;height:122px;border-radius:36px;background:#0B0B0B;border:1px solid rgba(255,255,255,.12);display:grid;place-items:center;box-shadow:0 0 0 10px rgba(229,9,20,.05),0 0 70px rgba(229,9,20,.18);animation:heartbeat 2.2s ease-in-out infinite}.splash-core span{font-size:44px;font-weight:1000;color:#fff}.load-steps{display:grid;gap:9px;margin:20px 0}.load-step{display:flex;gap:10px;align-items:center;font-size:12px;color:#8E8E8E}.load-step i{width:9px;height:9px;border-radius:50%;background:#2A2A2A}.load-step.active{color:#fff}.load-step.active i{background:var(--red);box-shadow:0 0 16px rgba(229,9,20,.5)}.loading-bar{height:7px;border-radius:10px;background:#1B1B1B;overflow:hidden}.loading-bar span{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--red),var(--red2));animation:load 5s var(--ease) forwards}.loading-copy{text-align:center;color:var(--muted);font-size:13px;line-height:1.5;margin-top:12px}.version{text-align:center;color:#5E5E5E;font-size:10px;margin-top:16px}
+.onboard{padding:24px 18px 30px}.onboard-wrap{width:min(520px,100%);margin:0 auto;display:flex;flex-direction:column;min-height:100vh}.onboard-top{display:flex;justify-content:space-between;align-items:center;padding:8px 0 22px}.skip{color:var(--muted);font-weight:800;background:none}.dots{display:flex;gap:6px}.dot{height:6px;width:6px;border-radius:99px;background:#2A2A2A;transition:.35s}.dot.active{width:24px;background:var(--red)}
+.hero-art{height:310px;border-radius:30px;border:1px solid var(--line);background:linear-gradient(160deg,#171717,#090909);position:relative;overflow:hidden;display:grid;place-items:center;box-shadow:var(--shadow)}.grid{position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.035) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.035) 1px,transparent 1px);background-size:30px 30px;mask-image:linear-gradient(to bottom,black,transparent 85%)}.neon-core{width:130px;height:130px;border-radius:34px;background:#101010;border:1px solid rgba(255,255,255,.12);box-shadow:0 0 0 10px rgba(229,9,20,.05),0 0 75px rgba(229,9,20,.18);display:grid;place-items:center;animation:pulse 3s ease-in-out infinite}.floating-pill{position:absolute;padding:9px 12px;border-radius:14px;background:rgba(8,8,8,.93);border:1px solid rgba(255,255,255,.12);font-size:10px;color:#fff;box-shadow:0 8px 24px rgba(0,0,0,.28)}.p1{top:20px;left:16px}.p2{right:16px;top:52px}.p3{left:24px;bottom:25px}.p4{right:22px;bottom:20px}
+.onboard-copy{padding:28px 4px 18px}.kicker{color:var(--red2);font-size:11px;font-weight:950;text-transform:uppercase;letter-spacing:1.5px}.onboard h2{font-size:39px;line-height:1.03;letter-spacing:-2px;margin:9px 0 14px}.onboard p{color:var(--muted);font-size:15px;line-height:1.65;margin:0}.next-row{margin-top:auto;padding-top:20px;display:flex;gap:10px;align-items:center}
+.primary{flex:1;padding:16px 18px;border-radius:16px;background:var(--red);color:#fff;font-weight:950;box-shadow:0 12px 28px rgba(229,9,20,.23);transition:.2s transform,.2s box-shadow}.primary:hover{transform:translateY(-1px);box-shadow:0 16px 30px rgba(229,9,20,.30)}.ghost{padding:16px;border-radius:16px;background:#141414;border:1px solid var(--line);color:#fff;font-weight:850}
+.auth{padding:20px 18px 34px}.auth-card{width:min(450px,100%);margin:0 auto;background:linear-gradient(180deg,#111,#090909);border:1px solid var(--line);border-radius:26px;padding:27px;box-shadow:var(--shadow)}.auth h2{font-size:31px;letter-spacing:-1.4px;margin:15px 0 10px}.auth p{color:var(--muted);line-height:1.55;margin:0 0 24px}.field{margin:14px 0}.field label{display:block;color:#BEBEBE;font-size:11px;font-weight:900;margin:0 0 8px}.field input,.field select,.field textarea{width:100%;border-radius:14px;border:1px solid var(--line);background:#0A0A0A;color:#fff;padding:14px 15px;outline:none}.field input:focus,.field select:focus,.field textarea:focus{border-color:rgba(229,9,20,.65);box-shadow:0 0 0 4px rgba(229,9,20,.08)}.code-box{display:grid;grid-template-columns:repeat(6,1fr);gap:8px}.code-box input{text-align:center;font-size:22px;font-weight:950;padding:13px 0}.trust{display:flex;gap:8px;align-items:center;color:#7E7E7E;font-size:10px;margin-top:14px}.trust .tiny-dot{width:7px;height:7px;border-radius:50%;background:var(--success)}.demo-link{display:block;text-align:center;color:#FF6670;font-size:11px;font-weight:850;margin-top:13px;background:none}
+.topbar{position:sticky;top:0;z-index:8;display:flex;align-items:center;justify-content:space-between;padding:14px 15px;background:rgba(5,5,5,.90);backdrop-filter:blur(20px);border-bottom:1px solid var(--line)}.avatar{width:38px;height:38px;border-radius:13px;background:#1A1A1A;color:#fff;display:grid;place-items:center;font-weight:900;border:1px solid var(--line)}.page{padding:16px 16px 110px;width:min(570px,100%);margin:0 auto}.welcome{display:flex;align-items:flex-end;justify-content:space-between;gap:12px}.welcome h2{margin:5px 0 0;font-size:31px;letter-spacing:-1.5px}.status-chip{padding:9px 11px;border-radius:12px;background:var(--redSoft);border:1px solid rgba(229,9,20,.20);color:#FF636B;font-size:10px;font-weight:950}.hero-metrics{margin-top:18px;display:grid;grid-template-columns:1.15fr .85fr;gap:11px}.stat-card{border-radius:20px;border:1px solid var(--line);background:linear-gradient(145deg,#151515,#0D0D0D);padding:16px;box-shadow:var(--shadow)}.stat-card .label{font-size:10px;color:var(--muted);font-weight:850}.big-num{font-size:31px;font-weight:1000;letter-spacing:-1.5px;margin-top:8px}.delta{font-size:10px;font-weight:900;color:var(--success);margin-top:4px}.graph{height:84px;margin-top:12px}.graph svg{width:100%;height:100%}.section-head{display:flex;justify-content:space-between;align-items:center;margin:24px 2px 11px}.section-head h3{margin:0;font-size:15px}.section-head span{font-size:10px;color:var(--muted)}.quick-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}.quick{padding:16px;border-radius:18px;background:#111;border:1px solid var(--line);text-align:left;color:white;transition:.2s transform,.2s border}.quick:hover{transform:translateY(-1px);border-color:rgba(229,9,20,.30)}.quick .qicon{width:36px;height:36px;border-radius:12px;background:#1A1A1A;display:grid;place-items:center;margin-bottom:10px;color:#fff}.quick strong{display:block;font-size:13px}.quick small{color:var(--muted);display:block;margin-top:4px}.feed{display:flex;flex-direction:column;gap:8px}.feed-item{display:flex;align-items:center;gap:11px;padding:13px 14px;border:1px solid var(--line);background:#0D0D0D;border-radius:16px}.feed-icon{width:34px;height:34px;border-radius:11px;display:grid;place-items:center;background:#1A1A1A}.feed-copy{flex:1}.feed-copy strong{font-size:12px;display:block}.feed-copy span{font-size:10px;color:var(--muted)}.amount{font-weight:900;font-size:12px}.pos{color:var(--success)}.neg{color:#FF6670}
+.bottom-nav{position:fixed;left:50%;bottom:11px;transform:translateX(-50%);z-index:10;width:min(530px,calc(100% - 18px));display:grid;grid-template-columns:repeat(6,1fr);padding:8px;background:rgba(14,14,14,.96);border:1px solid rgba(255,255,255,.10);backdrop-filter:blur(18px);border-radius:21px;box-shadow:0 18px 46px rgba(0,0,0,.45)}.navbtn{background:none;color:#6D6D6D;padding:8px 3px;border-radius:14px;display:flex;flex-direction:column;align-items:center;gap:4px;font-size:8px;font-weight:950}.navbtn.active{color:#fff;background:var(--redSoft)}.navico{font-size:16px;line-height:1}
+.toolbar{display:flex;gap:7px;overflow:auto;padding-bottom:2px}.chip{flex:0 0 auto;padding:9px 11px;border-radius:12px;background:#101010;color:#9A9A9A;border:1px solid var(--line);font-size:10px;font-weight:850}.chip.active{color:#fff;border-color:rgba(229,9,20,.35);background:var(--redSoft)}.list{display:flex;flex-direction:column;gap:9px}.order{padding:15px;border-radius:18px;border:1px solid var(--line);background:#101010}.order-top{display:flex;justify-content:space-between;gap:10px}.order-id{font-size:11px;color:#9E9E9E;font-weight:800}.order strong{font-size:13px}.order-meta{display:flex;gap:7px;flex-wrap:wrap;margin-top:9px}.tag{padding:6px 8px;border-radius:8px;background:#181818;color:#B5B5B5;font-size:9px;font-weight:800}.tag.green{color:var(--success);background:rgba(55,214,122,.08)}.tag.blue{color:#E5E5E5;background:#181818}.order-bottom{display:flex;justify-content:space-between;align-items:center;margin-top:13px}.order-price{font-size:15px;font-weight:950}
+.toggle-row{display:flex;justify-content:space-between;gap:12px;align-items:center;padding:15px;border-radius:18px;background:#101010;border:1px solid var(--line)}.toggle{width:50px;height:29px;background:#2B2B2B;border-radius:100px;padding:3px;transition:.3s}.toggle i{display:block;width:23px;height:23px;border-radius:50%;background:#D6D6D6;transition:.3s}.toggle.on{background:var(--red)}.toggle.on i{transform:translateX(21px);background:#fff}.console{border-radius:21px;border:1px solid var(--line);background:linear-gradient(160deg,#101010,#0A0A0A);padding:14px;min-height:410px}.chat{display:flex;flex-direction:column;gap:9px}.bubble{max-width:83%;padding:11px 13px;border-radius:16px;font-size:12px;line-height:1.45}.bot{align-self:flex-start;background:#1A1A1A;color:#EBEBEB;border-bottom-left-radius:6px}.user{align-self:flex-end;background:var(--red);border-bottom-right-radius:6px}.compose{display:flex;gap:8px;margin-top:10px}.compose input{flex:1}.send{width:48px;border-radius:14px;background:var(--red);color:white;font-weight:900}.live-strip{display:flex;justify-content:space-between;align-items:center;padding:10px 12px;border-radius:13px;background:rgba(229,9,20,.07);border:1px solid rgba(229,9,20,.18);margin-bottom:10px}.live-strip span{font-size:10px;color:#FF6670;font-weight:900}.metric-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.metric{padding:15px;border-radius:18px;background:#0F0F0F;border:1px solid var(--line)}.metric .m-num{font-size:23px;font-weight:950;margin-top:6px}.spark{height:55px;margin-top:8px}.mini-line{height:1px;background:linear-gradient(90deg,transparent,#343434,transparent);margin:14px 0}
+.uploader{padding:18px;border:1px dashed rgba(229,9,20,.34);background:rgba(229,9,20,.04);border-radius:20px;text-align:center}.uploader input{display:none}.upload-icon{width:44px;height:44px;margin:0 auto 9px;border-radius:13px;background:#1A1A1A;display:grid;place-items:center;font-size:20px}.uploader strong{font-size:13px}.uploader p{font-size:10px;color:var(--muted);margin:6px 0 12px}.price-table{margin-top:11px;display:flex;flex-direction:column;gap:6px}.price-row{display:grid;grid-template-columns:1fr auto;gap:8px;padding:11px 12px;background:#0E0E0E;border:1px solid var(--line);border-radius:13px}.price-row span{font-size:11px;color:#B4B4B4}.price-row b{font-size:11px}
+.tools-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:9px}.tool-card{padding:16px;border-radius:18px;background:#101010;border:1px solid var(--line)}.tool-icon{width:40px;height:40px;border-radius:13px;background:#1B1B1B;display:grid;place-items:center;font-size:18px}.tool-card h4{margin:10px 0 4px;font-size:13px}.tool-card p{margin:0;color:var(--muted);font-size:10px;line-height:1.5}.tool-row{margin-top:10px;display:flex;gap:6px}.tool-row button{flex:1}.smallbtn{padding:9px 10px;border-radius:11px;font-size:9px;font-weight:900;background:#191919;color:white;border:1px solid var(--line)}.guide-card{padding:17px;border-radius:21px;background:linear-gradient(145deg,#171717,#0E0E0E);border:1px solid var(--line)}.steps{display:flex;flex-direction:column;gap:10px;margin-top:12px}.step{display:flex;gap:10px}.num{width:26px;height:26px;flex:none;border-radius:9px;background:var(--red);display:grid;place-items:center;font-size:10px;font-weight:950}.step p{margin:0;font-size:11px;color:#BDBDBD;line-height:1.5}.toast{position:fixed;left:50%;bottom:94px;transform:translate(-50%,20px);background:#151515;border:1px solid rgba(255,255,255,.12);padding:11px 14px;border-radius:13px;color:#fff;font-size:11px;font-weight:800;box-shadow:var(--shadow);opacity:0;pointer-events:none;transition:.35s;z-index:30;white-space:nowrap}.toast.show{opacity:1;transform:translate(-50%,0)}
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.80);backdrop-filter:blur(9px);z-index:40;display:flex;align-items:flex-end;justify-content:center}.sheet{width:min(570px,100%);background:#0D0D0D;border:1px solid var(--line);border-bottom:0;border-radius:25px 25px 0 0;padding:21px;box-shadow:0 -20px 80px rgba(0,0,0,.5);animation:sheetIn .35s var(--ease)}.sheet h3{margin:0 0 6px;font-size:19px}.sheet p{margin:0 0 15px;color:var(--muted);font-size:11px;line-height:1.5}.sheet .row{display:flex;gap:8px;margin-top:10px}.sheet .row>*{flex:1}
+.notice{padding:15px;border-radius:18px;border:1px solid rgba(229,9,20,.28);background:linear-gradient(145deg,rgba(229,9,20,.13),rgba(229,9,20,.04));margin-top:14px}.notice strong{font-size:13px}.notice p{margin:5px 0 0;color:#C0C0C0;font-size:10px;line-height:1.5}.progress-wrap{display:flex;justify-content:space-between;gap:10px;align-items:center;margin-top:12px}.progress-track{height:7px;background:#262626;border-radius:20px;overflow:hidden;flex:1}.progress-track span{display:block;height:100%;background:var(--red);transition:.3s}.progress-label{font-size:10px;color:#A2A2A2}.wizard-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}.rubric{padding:12px;border-radius:14px;background:#0E0E0E;border:1px solid var(--line);text-align:left;color:#fff}.rubric.active{border-color:rgba(229,9,20,.50);background:var(--redSoft)}.rubric b{display:block;font-size:11px}.rubric span{display:block;font-size:9px;color:#9D9D9D;margin-top:3px}.check-list{display:grid;gap:8px;margin-top:10px}.check{display:flex;gap:8px;align-items:flex-start;padding:10px;border-radius:12px;background:#101010;border:1px solid var(--line)}.check input{accent-color:var(--red);margin-top:2px}.check span{font-size:10px;line-height:1.4;color:#C5C5C5}.success-card{padding:18px;border-radius:20px;border:1px solid rgba(55,214,122,.22);background:rgba(55,214,122,.06)}.success-card h3{margin:0 0 5px;font-size:17px}.success-card p{margin:0;color:#AFC9B8;font-size:10px;line-height:1.5}
+@keyframes floatIn{from{opacity:0;transform:translateY(18px) scale(.98)}to{opacity:1;transform:none}}@keyframes load{to{width:100%}}@keyframes heartbeat{0%,100%{transform:scale(1)}50%{transform:scale(1.035)}}@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.04)}}@keyframes sheetIn{from{transform:translateY(100%)}to{transform:none}}
+@media (min-width:800px){.page{width:660px}.bottom-nav{bottom:18px}.onboard{padding-top:40px}.onboard-wrap{width:620px}.hero-art{height:350px}}
+/* V4 accessibility/theme/premium motion */
+:root{--font-base:17px;--font-small:14px;--day-bg:#fff;--day-text:#111;--day-muted:#505057;--day-line:rgba(17,17,17,.13)}
+body{font-size:var(--font-base);transition:background .45s,color .45s}
+.brand h1{font-size:24px}.brand small{font-size:14px}.load-step{font-size:16px}.loading-copy{font-size:15px}.version{font-size:12px}
+.splash-panel{padding:34px}.splash-core,.splash-mark{display:none}.splash-panel:before{content:"Webot IA";display:block;font-size:52px;font-weight:1000;letter-spacing:-2.5px;margin:20px 0 32px;animation:textReveal .9s var(--ease)}.splash-panel:after{content:"Potenciá tu negocio con inteligencia artificial.";display:block;font-size:20px;line-height:1.35;color:var(--muted);margin-bottom:20px;animation:fadeUp .9s .15s both}
+.hero-art{height:360px;background:linear-gradient(135deg,#090909 0%,#231014 48%,#0a0a0a 100%);box-shadow:0 25px 70px rgba(0,0,0,.42)}
+.hero-art:before{content:"";position:absolute;inset:-20%;background:radial-gradient(circle at 25% 30%,rgba(229,9,20,.32),transparent 28%),radial-gradient(circle at 80% 65%,rgba(255,255,255,.08),transparent 26%);animation:ambient 8s ease-in-out infinite alternate}
+.onboard-copy{padding:32px 4px 20px}.onboard h2{font-size:46px;line-height:1.04}.onboard p{font-size:18px;line-height:1.62}.next-row{gap:12px}.primary,.ghost{font-size:18px;min-height:56px;padding:16px 20px}.skip{font-size:16px}.kicker{font-size:14px}
+.topbar{padding:16px}.page{padding:22px 18px 125px}.welcome h2{font-size:38px}.status-chip{font-size:13px}.stat-card{padding:20px}.stat-card .label,.section-head span{font-size:13px}.big-num{font-size:38px}.delta{font-size:13px}.section-head h3{font-size:19px}.quick{padding:20px}.quick strong{font-size:17px}.quick small{font-size:14px}.feed-item{padding:17px}.feed-copy strong{font-size:15px}.feed-copy span{font-size:13px}.amount{font-size:14px}.navbtn{font-size:12px;padding:10px 3px}.navico{font-size:20px}
+.auth-card{padding:32px}.auth h2{font-size:37px}.auth p{font-size:17px}.field label{font-size:13px}.field input,.field select,.field textarea{font-size:17px;padding:16px}.trust{font-size:13px}.demo-link{font-size:14px}.smallbtn{font-size:13px;padding:12px 13px}.toggle-row{padding:18px}.bubble{font-size:15px;padding:13px 15px}.live-strip span{font-size:13px}.tool-card h4{font-size:17px}.tool-card p{font-size:14px}.tool-card{padding:20px}.guide-card{padding:20px}.step p,.check span{font-size:14px;line-height:1.5}.rubric{padding:16px}.rubric b{font-size:15px}.rubric span,.rubric em{font-size:13px}.metric .m-num{font-size:29px}.metric{padding:18px}.notice strong{font-size:16px}.notice p{font-size:14px}
+.theme-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px}.theme-option{border:2px solid var(--line);background:var(--card);color:var(--text);border-radius:16px;padding:16px;text-align:left;transition:.3s}.theme-option.active{border-color:var(--red);box-shadow:0 0 0 4px var(--redSoft)}.theme-swatch{height:58px;border-radius:12px;margin-bottom:10px;display:flex;align-items:flex-end;padding:8px;font-weight:900}.day-swatch{background:#fff;color:#111;border:1px solid #ddd}.night-swatch{background:#090909;color:#fff}
+.survey-option{cursor:pointer;position:relative}.survey-option input{position:absolute;opacity:0}.survey-option.selected{border-color:rgba(229,9,20,.75);background:var(--redSoft)}.survey-progress{display:flex;gap:7px;margin:16px 0}.survey-step-dot{flex:1;height:6px;border-radius:99px;background:#333}.survey-step-dot.active{background:var(--red)}
+@keyframes textReveal{from{opacity:0;transform:translateY(28px) scale(.96);filter:blur(8px)}to{opacity:1;transform:none;filter:none}}@keyframes fadeUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}@keyframes ambient{from{transform:translate3d(-2%,-2%,0) scale(1)}to{transform:translate3d(2%,2%,0) scale(1.08)}}@keyframes spin{to{transform:rotate(360deg)}}@keyframes barGrow{from{transform:scaleY(.78);transform-origin:bottom}to{transform:scaleY(1.06);transform-origin:bottom}}@keyframes ping{70%,100%{box-shadow:0 0 0 16px rgba(55,214,122,0)}}@keyframes rocketFloat{0%,100%{transform:translateY(10px) rotate(-1deg)}50%{transform:translateY(-14px) rotate(1deg)}}@keyframes trailMove{from{opacity:0;transform:translateY(-45px) scale(.7)}50%{opacity:1}to{opacity:0;transform:translateY(65px) scale(1.15)}}
+body.theme-day{background:#fff;color:#111}body.theme-day .topbar{background:rgba(255,255,255,.94)}body.theme-day .bottom-nav{background:rgba(255,255,255,.97)}body.theme-day .stat-card,body.theme-day .quick,body.theme-day .feed-item,body.theme-day .tool-card,body.theme-day .metric,body.theme-day .order,body.theme-day .guide-card,body.theme-day .check,body.theme-day .toggle-row,body.theme-day .console,body.theme-day .auth-card,body.theme-day .theme-option{background:#fff;color:#111;border-color:var(--day-line)}body.theme-day .field input,body.theme-day .field select,body.theme-day .field textarea{background:#f8f8f9;color:#111;border-color:var(--day-line)}body.theme-day .navbtn{color:#666}body.theme-day .navbtn.active{color:#111}body.theme-day .splash{background:linear-gradient(135deg,#fff 0%,#fff1f2 45%,#fff 100%)}
+@media (max-width:520px){.onboard h2{font-size:40px}.hero-art{height:320px}.page{padding-left:16px;padding-right:16px}.big-num{font-size:34px}}
+
+
+.loading-game{margin-top:18px}
+.run-track{position:relative;height:132px;border-radius:18px;background:linear-gradient(180deg,#111,#090909);border:1px solid rgba(255,255,255,.09);overflow:hidden;box-shadow:inset 0 -18px 30px rgba(229,9,20,.05)}
+.run-track:before{content:"";position:absolute;left:0;right:0;bottom:12px;height:2px;background:linear-gradient(90deg,transparent,rgba(229,9,20,.45),transparent)}
+.runner-bot{position:absolute;left:8%;bottom:26px;width:52px;height:58px;animation:runAcross 4.25s linear infinite,runnerBob .26s ease-in-out infinite alternate;filter:drop-shadow(0 6px 14px rgba(229,9,20,.35))}
+.bot-head{position:absolute;top:0;left:9px;width:28px;height:19px;border-radius:8px;background:#fff;border:3px solid var(--red);display:flex;gap:5px;align-items:center;justify-content:center}
+.bot-head i{width:4px;height:4px;border-radius:50%;background:var(--red);display:block}
+.bot-body{position:absolute;left:6px;top:19px;width:32px;height:23px;border-radius:9px;background:var(--red);box-shadow:inset 0 -4px 0 rgba(0,0,0,.15)}
+.bot-arm,.bot-leg{position:absolute;display:block;background:#fff;border-radius:99px;transform-origin:top center}
+.bot-arm{top:21px;width:6px;height:19px}.bot-arm.a1{left:5px;animation:armRun .26s ease-in-out infinite alternate}.bot-arm.a2{right:3px;animation:armRun .26s .13s ease-in-out infinite alternate}
+.bot-leg{top:38px;width:6px;height:19px}.bot-leg.l1{left:11px;animation:legRun .26s ease-in-out infinite alternate}.bot-leg.l2{right:10px;animation:legRun .26s .13s ease-in-out infinite alternate}
+.run-dash{position:absolute;height:3px;width:28px;border-radius:99px;background:rgba(255,255,255,.2);right:-30px;animation:dashMove 1s linear infinite}
+.run-dash.d1{top:23px;animation-delay:.1s}.run-dash.d2{top:47px;width:42px;animation-delay:.42s}.run-dash.d3{top:68px;width:20px;animation-delay:.72s}
+.load-percent{display:flex;justify-content:space-between;align-items:center;margin-top:7px;color:#737373;font-size:10px;font-weight:900;letter-spacing:.7px}.load-percent b{color:#fff;font-size:11px}
+.rubric{padding:18px}.rubric b{font-size:17px;line-height:1.15}.rubric span{font-size:15px;line-height:1.35;margin-top:6px;color:#C5C5C5}.rubric em{font-size:13px!important;line-height:1.35}
+.splash-panel .version{line-height:1.4}
+
+.crusher-wordmark{position:absolute;right:6%;top:-90px;z-index:4;padding:12px 16px;border:1px solid rgba(255,255,255,.16);border-radius:13px;background:rgba(12,12,12,.96);color:#fff;font-size:15px;font-weight:1000;letter-spacing:1.4px;box-shadow:0 18px 40px rgba(0,0,0,.4);white-space:nowrap;animation:crusherDrop 5s ease-in-out infinite}
+.crusher-wordmark:after{content:"";position:absolute;left:20%;right:20%;bottom:-10px;height:10px;background:linear-gradient(180deg,#e50914,transparent);filter:blur(3px);opacity:.65}
+.crush-impact{position:absolute;left:50%;bottom:12px;width:90px;height:8px;border-radius:99px;transform:translateX(-50%) scaleX(.4);background:rgba(229,9,20,.2);animation:impact 5s ease-in-out infinite}
+.powered-by{margin-top:12px;text-align:center;color:#777;font-size:11px;font-weight:850;letter-spacing:.5px}.powered-by b{color:#fff}
+@keyframes crusherDrop{0%,57%{top:-90px;transform:scale(1) rotate(-1deg)}66%{top:38px;transform:scale(1.05) rotate(.5deg)}69%{top:31px;transform:scaleX(1.22) scaleY(.62) rotate(0)}74%{top:35px;transform:scaleX(1.06) scaleY(.82)}82%,100%{top:34px;transform:scaleX(1) scaleY(1)}}
+@keyframes impact{0%,62%{opacity:0;transform:translateX(-50%) scaleX(.4)}68%{opacity:1;transform:translateX(-50%) scaleX(1.9)}76%,100%{opacity:0;transform:translateX(-50%) scaleX(3.2)}}
+
+@keyframes runAcross{from{left:-48px}to{left:calc(100% - 4px)}}@keyframes runnerBob{from{transform:translateY(1px)}to{transform:translateY(-3px)}}@keyframes armRun{from{transform:rotate(33deg)}to{transform:rotate(-38deg)}}@keyframes legRun{from{transform:rotate(-34deg)}to{transform:rotate(38deg)}}@keyframes dashMove{from{transform:translateX(0);opacity:0}20%{opacity:1}to{transform:translateX(-140px);opacity:0}}
+
+</style>
+</head>
+<body>
+<div class="app-shell">
+  <section id="splash" class="screen splash center">
+    <div class="splash-panel">
+      <div class="brand-lockup"><div class="logo"></div><div class="brand"><h1>webot IA</h1><small>Tu negocio, automatizado.</small></div></div>
+      <div class="splash-mark"><div class="splash-core"><span>W</span></div></div>
+      <div class="load-steps">
+        <div class="load-step active"><i></i><span>Protegiendo la sesión de tu negocio</span></div>
+        <div class="load-step active"><i></i><span>Preparando el motor de atención</span></div>
+        <div class="load-step active"><i></i><span>Cargando herramientas útiles</span></div>
+      </div>
+      <div class="loading-copy">Preparando una experiencia limpia y lista para usar.</div>
+      <div class="loading-game" aria-label="Cargando Webot IA">
+        <div class="run-track">
+          <div class="crusher-wordmark">WEBLOCK COMPANY LLC</div>
+          <div class="crush-impact"></div>
+          <div class="runner-bot">
+            <span class="bot-head"><i></i><i></i></span>
+            <span class="bot-body"></span>
+            <span class="bot-arm a1"></span><span class="bot-arm a2"></span>
+            <span class="bot-leg l1"></span><span class="bot-leg l2"></span>
+          </div>
+          <div class="run-dash d1"></div><div class="run-dash d2"></div><div class="run-dash d3"></div>
+        </div>
+        <div class="loading-bar"><span></span></div>
+        <div class="load-percent"><span>INICIANDO SISTEMAS</span><b>0%</b></div>
+      </div>
+      <div class="powered-by">Powered by <b>Weblock Company LLC</b></div>
+    </div>
+  </section>
+
+
+  <section id="countrySetup" class="screen auth hidden center">
+    <div class="auth-card">
+      <div class="brand-lockup"><div class="logo"></div><div class="brand"><h1>webot IA</h1><small>Configuración inicial</small></div></div>
+      <div class="kicker" style="margin-top:25px">ANTES DE EMPEZAR</div>
+      <h2>Personalicemos tu operación.</h2>
+      <p>Necesitamos saber dónde opera tu negocio y qué moneda vas a utilizar. Ambos datos son obligatorios y se aplicarán automáticamente en todo Webot IA.</p>
+      <div class="field"><label>PAÍS DE OPERACIÓN *</label><input id="countryInput" type="text" autocomplete="country-name" placeholder="Ej. Argentina"></div>
+      <div class="field"><label>MONEDA DE OPERACIÓN *</label><input id="currencyInput" type="text" autocomplete="off" placeholder="Ej. Peso argentino (ARS), USD, EUR"></div>
+      <div class="notice" style="margin-top:16px"><strong>Tu elección queda guardada.</strong><p>La moneda que escribas será la referencia utilizada para mostrar precios, ventas y movimientos dentro de la app.</p></div>
+      <button id="saveLocale" class="primary" style="width:100%;margin-top:16px">Continuar</button>
+      <div class="trust"><span class="tiny-dot"></span> Configuración privada por cuenta</div>
+    </div>
+  </section>
+
+  <section id="onboarding" class="screen onboard hidden">
+    <div class="onboard-wrap">
+      <div class="onboard-top"><div class="brand-lockup"><div class="logo" style="width:42px;height:42px;border-radius:13px"></div><div class="brand"><h1 style="font-size:18px">webot IA</h1><small>atención + automatización</small></div></div><button id="skipOnboard" class="skip">Saltar</button></div>
+      <div class="dots" id="dots"></div><div class="hero-art" id="heroArt"></div>
+      <div class="onboard-copy"><div class="kicker" id="onKicker"></div><h2 id="onTitle"></h2><p id="onText"></p></div>
+      <div class="next-row"><button id="backOn" class="ghost hidden">Atrás</button><button id="nextOn" class="primary">Continuar</button></div>
+    </div>
+  </section>
+
+  <section id="auth" class="screen auth hidden center">
+    <div class="auth-card">
+      <div class="brand-lockup"><div class="logo"></div><div class="brand"><h1>webot IA</h1><small>Acceso seguro por cuenta</small></div></div>
+      <div class="kicker" style="margin-top:25px">Acceso de cliente</div><h2>Activa tu cuenta</h2>
+      <p>Ingresa el código que recibiste con tu suscripción. Después vas a configurar tu bot con nuestro flujo de 5 minutos.</p>
+      <div class="field"><label>CÓDIGO DE ACTIVACIÓN</label><div class="code-box" id="codeBox"></div></div>
+      <div class="theme-choice"><div class="field" style="margin-bottom:8px"><label>APARIENCIA</label></div><div class="theme-row"><button class="theme-option" id="themeDay"><div class="theme-swatch day-swatch">Rojo + blanco</div><b>Modo día</b></button><button class="theme-option active" id="themeNight"><div class="theme-swatch night-swatch">Rojo + negro</div><b>Modo noche</b></button></div></div><button id="activate" class="primary" style="width:100%;margin-top:8px">Entrar a Webot IA</button>
+      <button id="demo" class="demo-link">Ver demo completa</button>
+      <div class="trust"><span class="tiny-dot"></span> Separación por cuenta · nunca mostramos claves ni datos internos</div>
+    </div>
+  </section>
+
+  <section id="app" class="screen hidden">
+    <header class="topbar"><div class="brand-lockup"><div class="logo" style="width:38px;height:38px;border-radius:12px"></div><div class="brand"><h1 style="font-size:17px">webot IA</h1><small id="topSub">Panel de control · <span id="localeLabel"></span></small></div></div><button id="profileBtn" class="avatar">JL</button></header>
+    <main id="content" class="page"></main>
+    <nav class="bottom-nav">
+      <button class="navbtn active" data-view="home"><span class="navico">⌂</span>Inicio</button>
+      <button class="navbtn" data-view="bot"><span class="navico">◉</span>Bot IA</button>
+      <button class="navbtn" data-view="setup"><span class="navico">⚙</span>Configurar</button>
+      <button class="navbtn" data-view="metrics"><span class="navico">↗</span>Métricas</button>
+      <button class="navbtn" data-view="tools"><span class="navico">✦</span>Más</button>
+      <button class="navbtn" data-view="turnos"><span class="navico">◷</span>Turnos</button>
+      <button class="navbtn" data-view="clientes"><span class="navico">♟</span>Clientes</button>
+    </nav>
+  </section>
+
+  <div id="toast" class="toast"></div><div id="modal" class="modal hidden"></div>
+</div>
+<input id="pdfInput" type="file" accept="application/pdf" class="hidden">
+<script>
+const state={
+ view:'home',country:'',currency:'',onboarding:0,botOn:true,humanPaused:false,code:'',setupStep:0,setupDone:false,surveyDone:false,
+ plan:'Pro',renewal:'2026-09-15',businessName:'Tu negocio',tenantId:'demo_tenant',
+ config:{rubro:'comercio_local',tone:'cercano_y_profesional',business_knowledge:'',qualification_fields:['Nombre','Producto o servicio de interés','Fecha preferida'],booking_url:'',payment_url:'',human_takeover_keywords:['humano','vendedor','asesor','urgencia'],pause_bot:false},
+ prices:[['Pack Inicio',18900],['Pack Pro',34900],['Servicio Premium',62900],['Diagnóstico Express',12900]],
+ orders:[['#WB-1048','María G.','Pack Pro','ARS 34.900','Pagado'],['#WB-1047','Lucas R.','Servicio Premium','ARS 62.900','En preparación'],['#WB-1046','Sol P.','Pack Inicio','ARS 18.900','Nuevo'],['#WB-1045','Franco M.','Diagnóstico Express','ARS 12.900','Pagado']]
+};
+const onboard=[
+ {k:'Empezá sin vueltas',t:'Tu bot se configura en 5 minutos.',p:'Eliges tu rubro, cargas lo esencial y nosotros armamos la estructura correcta para responder, derivar y vender.',theme:'core'},
+ {k:'Sin exponer información sensible',t:'Solo pedimos lo que el bot necesita.',p:'No mostramos API keys, credenciales ni estructura interna. Cada negocio queda aislado por su cuenta.',theme:'safe'},
+ {k:'Más control, menos ruido',t:'Solo herramientas que realmente sirven.',p:'Configuración, base de conocimiento, intervención humana, seguimiento y alertas. Nada de contadores inútiles.',theme:'ops'},
+ {k:'Listo antes de salir a vender',t:'Pruébalo antes de activarlo.',p:'El flujo valida datos, crea reglas de derivación y hace una prueba final para reducir respuestas incorrectas.',theme:'rocket'}
+];
+const rubros=[
+ ['comercio_local','Comercio local','Productos, precios, stock',['Nombre','Producto de interés','Presupuesto']],['ecommerce','E-commerce','Catálogo, envíos, pagos',['Nombre','Producto','Medio de entrega']],['servicios_profesionales','Servicios profesionales','Consultas, presupuesto, agenda',['Nombre','Servicio requerido','Fecha preferida']],['servicios_medicos','Servicios médicos','Tratamientos, horarios, derivación',['Nombre','Tratamiento deseado','Fecha preferida']],['gastronomia','Gastronomía','Menú, reservas, horarios',['Nombre','Cantidad de personas','Fecha y hora']],['inmobiliaria','Inmobiliaria','Propiedades, visitas, requisitos',['Nombre','Tipo de propiedad','Zona']],['educacion','Educación','Cursos, inscripción, fechas',['Nombre','Curso de interés','Fecha preferida']],['estetica','Estética y bienestar','Servicios, turnos, cuidados',['Nombre','Servicio deseado','Fecha preferida']]
+];
+function setScreen(id){['splash','countrySetup','onboarding','auth','app'].forEach(x=>document.getElementById(x).classList.add('hidden'));document.getElementById(id).classList.remove('hidden')}
+function toast(t){const el=document.getElementById('toast');el.textContent=t;el.classList.add('show');clearTimeout(window.__toast);window.__toast=setTimeout(()=>el.classList.remove('show'),2200)}
+function money(n){
+  const raw=String(state.currency||'').trim();
+  const code=(raw.match(/\b[A-Z]{3}\b/)||[])[0];
+  const symbols={ARS:'$',USD:'US$',EUR:'€',BRL:'R$',CLP:'$',MXN:'MX$',COP:'COL$',PEN:'S/'};
+  const unit=symbols[code]||code||raw||'';
+  return `${unit} ${Math.round(n).toLocaleString('es-AR')}`.trim();
+}
+function activeNav(){document.querySelectorAll('.navbtn').forEach(b=>b.classList.toggle('active',b.dataset.view===state.view))}
+function svgFor(theme){
+ const scenes={
+  core:`<div class="scene scene-sales"><div class="scene-glow"></div><div class="scene-card"><b>CLIENTE</b><span>Hola, ¿qué necesitás?</span><i>●</i></div><div class="scene-card card2"><b>WEBOT IA</b><span>Respuesta automática lista</span><i>✓</i></div><div class="scene-line"></div></div>`,
+  safe:`<div class="scene scene-safe"><div class="shield">✓</div><div class="orbit o1"></div><div class="orbit o2"></div><div class="secure-label">Tu información queda protegida</div></div>`,
+  ops:`<div class="scene scene-ops"><div class="dashboard-fake"><div class="bar"></div><div class="bars"><i></i><i></i><i></i><i></i><i></i></div><div class="pulse-dot"></div></div><div class="float-label l1">Leads</div><div class="float-label l2">Alertas</div><div class="float-label l3">Seguimientos</div></div>`,
+  rocket:`<div class="scene scene-rocket"><div class="launch-core">WEBOT<br><span>IA</span></div><div class="trail t1"></div><div class="trail t2"></div><div class="mission-label">LISTO PARA DESPEGAR</div></div>`
+ };
+ return `<style>
+ .scene{position:relative;width:100%;height:100%;display:grid;place-items:center;overflow:hidden}.scene-sales{background:radial-gradient(circle at 50% 50%,rgba(229,9,20,.18),transparent 45%)}
+ .scene-card{position:absolute;width:72%;padding:20px;border:1px solid rgba(255,255,255,.14);border-radius:20px;background:rgba(8,8,8,.82);backdrop-filter:blur(10px);box-shadow:0 25px 45px rgba(0,0,0,.32);display:grid;gap:7px;animation:floatCard 4.5s ease-in-out infinite}.scene-card b{font-size:13px;color:#ff6b72}.scene-card span{font-size:18px}.scene-card i{justify-self:end;font-style:normal;color:#37D67A}.scene-card.card2{width:64%;transform:translate(18%,40%);animation-delay:.7s}.scene-line{position:absolute;width:210px;height:210px;border:1px solid rgba(229,9,20,.28);border-radius:50%;animation:spin 11s linear infinite}.scene-glow{width:170px;height:170px;border-radius:50%;background:rgba(229,9,20,.15);filter:blur(25px);animation:heartbeat 3s infinite}
+ .scene-safe{background:radial-gradient(circle,rgba(229,9,20,.12),transparent 55%)}.shield{width:132px;height:152px;clip-path:polygon(50% 0,92% 15%,84% 70%,50% 100%,16% 70%,8% 15%);background:linear-gradient(145deg,#e50914,#73040a);display:grid;place-items:center;font-size:52px;font-weight:1000;box-shadow:0 25px 70px rgba(229,9,20,.3);animation:rocketFloat 4s ease-in-out infinite}.orbit{position:absolute;border:1px solid rgba(255,255,255,.15);border-radius:50%;width:230px;height:230px;animation:spin 9s linear infinite}.o2{width:300px;height:300px;animation-direction:reverse;animation-duration:14s}.secure-label{position:absolute;bottom:28px;font-size:16px;font-weight:800}
+ .scene-ops{background:radial-gradient(circle at 60% 45%,rgba(229,9,20,.13),transparent 45%)}.dashboard-fake{width:74%;height:190px;border:1px solid rgba(255,255,255,.12);border-radius:20px;background:rgba(10,10,10,.92);padding:20px;box-shadow:0 25px 55px rgba(0,0,0,.35);animation:floatCard 5s ease-in-out infinite}.bar{height:12px;width:45%;background:#333;border-radius:9px;margin-bottom:25px}.bars{display:flex;align-items:flex-end;gap:10px;height:105px}.bars i{flex:1;border-radius:8px 8px 3px 3px;background:linear-gradient(#ff3944,#76040a);animation:barGrow 2s ease-in-out infinite alternate}.bars i:nth-child(2){height:48%}.bars i:nth-child(3){height:76%;animation-delay:.25s}.bars i:nth-child(4){height:59%;animation-delay:.5s}.bars i:nth-child(5){height:88%;animation-delay:.75s}.bars i:nth-child(1){height:37%;animation-delay:.1s}.pulse-dot{position:absolute;width:16px;height:16px;border-radius:50%;background:#37D67A;box-shadow:0 0 0 0 rgba(55,214,122,.45);animation:ping 1.8s infinite}.float-label{position:absolute;padding:10px 14px;background:rgba(12,12,12,.93);border:1px solid rgba(255,255,255,.12);border-radius:14px;font-size:14px;font-weight:800}.l1{top:28px;left:18px}.l2{top:78px;right:18px}.l3{bottom:28px;left:22px}
+ .scene-rocket{background:radial-gradient(circle at 50% 65%,rgba(229,9,20,.18),transparent 40%)}.launch-core{width:150px;height:150px;border-radius:36px;background:linear-gradient(145deg,#e50914,#68040a);display:grid;place-items:center;color:#fff;text-align:center;font-weight:1000;font-size:24px;box-shadow:0 35px 90px rgba(229,9,20,.3);animation:rocketFloat 3.2s ease-in-out infinite}.launch-core span{font-size:45px}.trail{position:absolute;width:9px;height:150px;background:linear-gradient(transparent,#ff5660,transparent);filter:blur(1px);animation:trailMove 1.5s linear infinite}.t1{transform:translateX(-32px) rotate(8deg)}.t2{transform:translateX(32px) rotate(-8deg);animation-delay:.4s}.mission-label{position:absolute;bottom:30px;font-size:15px;letter-spacing:2px;font-weight:950}
+ </style>${scenes[theme]||scenes.core}`;
+}
+function renderOnboard(){const o=onboard[state.onboarding];document.getElementById('heroArt').innerHTML=svgFor(o.theme);document.getElementById('onKicker').textContent=o.k;document.getElementById('onTitle').textContent=o.t;document.getElementById('onText').textContent=o.p;document.getElementById('dots').innerHTML=onboard.map((_,i)=>`<span class="dot ${i===state.onboarding?'active':''}"></span>`).join('');document.getElementById('backOn').classList.toggle('hidden',state.onboarding===0);document.getElementById('nextOn').textContent=state.onboarding===onboard.length-1?'Activar mi Webot':'Continuar'}
+function render(){const c=document.getElementById('content');const ll=document.getElementById('localeLabel');if(ll)ll.textContent=state.currency?`${state.country} · ${state.currency}`:'';activeNav();if(state.view==='home')c.innerHTML=homeView();if(state.view==='bot')c.innerHTML=botView();if(state.view==='setup')c.innerHTML=setupView();if(state.view==='metrics')c.innerHTML=metricsView();if(state.view==='tools')c.innerHTML=toolsView();if(state.view==='clientes')c.innerHTML=clientesView();if(state.view==='turnos')c.innerHTML=turnosView();bindView();}
+function homeView(){
+ return `<div class="welcome"><div><div class="kicker">Buenos días, ${escapeHtml(state.businessName)}</div><h2>Tu negocio está<br>en movimiento.</h2></div><span class="status-chip">● Bot online</span></div>
+ <div class="notice"><strong>Suscripción: ${state.plan}</strong><p>Próximo vencimiento: <b>15 de septiembre de 2026</b>. Te avisaremos antes y dentro de la app.</p><button class="smallbtn" style="margin-top:9px;width:100%" id="billingBtn">Ver estado de suscripción</button></div>
+ <div class="hero-metrics"><div class="stat-card"><div class="label">VENTAS HOY</div><div class="big-num">${money(438500)}</div><div class="delta">↗ 18,4% vs. ayer</div></div><div class="stat-card"><div class="label">CONVERSACIONES</div><div class="big-num">1.284</div><div class="delta">+12,7% semana</div><div class="mini-line"></div><div style="font-size:10px;color:#8D8D8D">72% respondidas por IA</div></div></div>
+ <div class="section-head"><h3>Acciones rápidas</h3><span>1 toque</span></div><div class="quick-grid">
+ <button class="quick" data-go="setup"><div class="qicon">⚙</div><strong>Configurar en 5 min</strong><small>${state.setupDone?'Configuración completa':'Completar ahora'}</small></button>
+ <button class="quick" data-go="bot"><div class="qicon">◉</div><strong>Modo en vivo</strong><small>Pausar y tomar control</small></button>
+ <button class="quick" data-go="tools"><div class="qicon">▦</div><strong>Base de conocimiento</strong><small>Precios, FAQ y archivos</small></button>
+ <button class="quick" data-go="metrics"><div class="qicon">↗</div><strong>Resumen semanal</strong><small>Qué está funcionando</small></button>
+ <button class="quick" data-go="clientes"><div class="qicon">♟</div><strong>Clientes</strong><small>Ver conversaciones reales</small></button></div>
+ <div class="section-head"><h3>Actividad reciente</h3><span>Ahora</span></div><div class="feed">${[['✦','Cliente calificado','Interesado en Pack Pro','+1 lead'],['⚡','Venta detectada','Lucas R. completó un pedido','+62.900'],['↗','Seguimiento enviado','Email automático · 12:42','+1 contacto']].map((x,i)=>`<div class="feed-item"><div class="feed-icon">${x[0]}</div><div class="feed-copy"><strong>${x[1]}</strong><span>${x[2]}</span></div><div class="amount ${i===2?'pos':''}">${x[3]}</div></div>`).join('')}</div>`;
+}
+function botView(){const firstProduct=backendProducts[0];const demoProduct=firstProduct?.nombre||'tu producto';const demoPrice=firstProduct?money(Number(firstProduct.precio||0)):'el precio configurado';return `<div class="kicker">CENTRO DE IA</div><h2 style="font-size:31px;letter-spacing:-1.4px;margin:6px 0">Tu bot está ${state.botOn?'activo':'pausado'}.</h2><p style="margin:0;color:var(--muted);font-size:12px;line-height:1.5">La atención usa la información configurada para tu cuenta y puede derivar a una persona cuando corresponde.</p><div style="margin-top:15px" class="toggle-row"><div><strong style="font-size:13px">Automatización</strong><div style="font-size:10px;color:var(--muted);margin-top:4px">${state.botOn?'Respuestas automáticas activas':'Bot pausado temporalmente'}</div></div><button class="toggle ${state.botOn?'on':''}" id="botToggle"><i></i></button></div><div style="margin-top:9px" class="live-strip"><span>${state.humanPaused?'● INTERVENCIÓN HUMANA ACTIVA':'● MONITOREO INTELIGENTE'}</span><button class="smallbtn" id="pauseHuman">${state.humanPaused?'Retomar IA':'Tomar control'}</button></div><div class="console"><div class="chat"><div class="bubble bot">Hola 👋 Soy el asistente de tu negocio. Puedo darte información, agendar y derivarte con una persona.</div><div class="bubble user">Quiero saber cuánto sale ${escapeHtml(demoProduct)}.</div><div class="bubble bot">${escapeHtml(demoProduct)} tiene un valor de <b>${'${demoPrice}'}</b>. ¿Querés que te ayude a elegir?</div></div></div><div class="compose"><input id="chatInput" placeholder="Probar una consulta del cliente…"><button id="sendMsg" class="send">↑</button></div><div class="section-head"><h3>Reglas de seguridad</h3><span>Activas</span></div><div class="guide-card"><div class="check-list"><div class="check"><input type="checkbox" checked disabled><span>No inventar precios, horarios ni condiciones que no estén en la base de conocimiento.</span></div><div class="check"><input type="checkbox" checked disabled><span>Derivar cuando aparezcan palabras o intenciones de intervención humana.</span></div><div class="check"><input type="checkbox" checked disabled><span>Usar el link de agenda o pago solo cuando la intención corresponda.</span></div></div></div>`}
+function setupView(){
+ const step=state.setupStep;const pct=Math.round(((step)/5)*100);if(step===5)return `<div class="kicker">CONFIGURACIÓN COMPLETA</div><div style="margin-top:9px" class="success-card"><h3>✅ Tu bot quedó listo para probar.</h3><p>La estructura ya contempla rubro, tono, conocimiento, campos de calificación, agenda, pago y reglas de derivación.</p></div><div class="section-head"><h3>Resumen</h3><span>Por esta cuenta</span></div><div class="list"><div class="order"><div class="order-top"><div><div class="order-id">RUBRO</div><strong>${rubros.find(r=>r[0]===state.config.rubro)?.[1]||'Personalizado'}</strong></div><span class="tag green">Validado</span></div></div><div class="order"><div class="order-top"><div><div class="order-id">TONO</div><strong>${state.config.tone==='cercano_y_profesional'?'Cercano y profesional':'Claro y directo'}</strong></div><span class="tag green">Validado</span></div></div><div class="order"><div class="order-top"><div><div class="order-id">DERIVACIÓN</div><strong>${state.config.human_takeover_keywords.join(', ')}</strong></div><span class="tag green">Activa</span></div></div></div><button class="primary" style="width:100%;margin-top:14px" id="retestBot">Hacer prueba del bot</button><button class="ghost" style="width:100%;margin-top:9px" id="saveConfigNow">Guardar configuración</button>`;
+ let body='';
+ if(step===0)body=`<div class="kicker">PASO 1 DE 5</div><h2 style="font-size:30px;letter-spacing:-1.4px;margin:7px 0">Elige el rubro.</h2><p style="margin:0;color:var(--muted);font-size:12px;line-height:1.5">Esto aplica una plantilla interna con los campos que más necesita tu tipo de negocio.</p><div class="wizard-grid" style="margin-top:14px">${rubros.map(r=>`<button class="rubric ${state.config.rubro===r[0]?'active':''}" data-rubro="${r[0]}"><b>${r[1]}</b><span>${r[2]}</span><em style="display:block;margin-top:7px;color:#E9E9E9;font-size:9px;font-style:normal">${r[3].join(' · ')}</em></button>`).join('')}</div>`;
+ if(step===1)body=`<div class="kicker">PASO 2 DE 5</div><h2 style="font-size:30px;letter-spacing:-1.4px;margin:7px 0">Definí cómo habla.</h2><p style="margin:0;color:var(--muted);font-size:12px">El tono se guarda como configuración, no como una contraseña ni una clave.</p><div class="field"><label>NOMBRE DEL NEGOCIO</label><input id="businessName" value="${escapeAttr(state.businessName)}" placeholder="Ej. Clínica Sonrisas"></div><div class="field"><label>TONO</label><select id="tone"><option value="cercano_y_profesional" ${state.config.tone==='cercano_y_profesional'?'selected':''}>Cercano y profesional</option><option value="claro_y_directo" ${state.config.tone==='claro_y_directo'?'selected':''}>Claro y directo</option></select></div>`;
+ if(step===2)body=`<div class="kicker">PASO 3 DE 5</div><h2 style="font-size:30px;letter-spacing:-1.4px;margin:7px 0">Carga el conocimiento.</h2><p style="margin:0;color:var(--muted);font-size:12px">Puedes escribir lo esencial o subir un PDF. No hace falta pegar claves, tokens ni datos internos.</p><div class="field"><label>INFORMACIÓN QUE EL BOT PUEDE USAR</label><textarea id="bizKnowledge" rows="7" placeholder="Horarios, productos, servicios, políticas, zonas, preguntas frecuentes…">${escapeHtml(state.config.business_knowledge)}</textarea></div><div class="uploader"><div class="upload-icon">↑</div><strong>Subir PDF de precios o catálogo</strong><p>Se prepara para incorporarlo al conocimiento del negocio.</p><button class="smallbtn" id="pdfBtnWizard" style="width:100%">Seleccionar PDF</button></div>`;
+ if(step===3)body=`<div class="kicker">PASO 4 DE 5</div><h2 style="font-size:30px;letter-spacing:-1.4px;margin:7px 0">Conecta lo que importa.</h2><p style="margin:0;color:var(--muted);font-size:12px">Los links se usan solo cuando el cliente pide reservar o pagar.</p><div class="field"><label>LINK DE AGENDA</label><input id="booking" value="${escapeAttr(state.config.booking_url)}" placeholder="https://..."></div><div class="field"><label>LINK DE PAGO</label><input id="payment" value="${escapeAttr(state.config.payment_url)}" placeholder="https://..."></div><div class="field"><label>PALABRAS DE DERIVACIÓN</label><input id="humanKeys" value="${escapeAttr(state.config.human_takeover_keywords.join(', '))}" placeholder="humano, vendedor, asesor"></div>`;
+ if(step===4)body=`<div class="kicker">PASO 5 DE 5</div><h2 style="font-size:30px;letter-spacing:-1.4px;margin:7px 0">Probemos antes de salir.</h2><p style="margin:0;color:var(--muted);font-size:12px">Marca las comprobaciones obligatorias. Esto evita activar un bot incompleto.</p><div class="check-list"><label class="check"><input type="checkbox" id="chk1"><span>El nombre del negocio y el rubro están definidos.</span></label><label class="check"><input type="checkbox" id="chk2"><span>La información del negocio está cargada.</span></label><label class="check"><input type="checkbox" id="chk3"><span>Existe al menos una regla de derivación humana.</span></label><label class="check"><input type="checkbox" id="chk4"><span>Agenda y/o pago están listos o no aplican al negocio.</span></label></div>`;
+ return `<div class="kicker">CONFIGURADOR EXPRESS</div><div class="progress-wrap"><span class="progress-label">0 → 5 minutos</span><div class="progress-track"><span style="width:${pct}%"></span></div><span class="progress-label">${step}/5</span></div><div style="margin-top:14px">${body}</div><div class="next-row"><button class="ghost" id="setupBack" ${step===0?'disabled':''}>Atrás</button><button class="primary" id="setupNext">${step===4?'Validar y dejar listo':'Continuar'}</button></div>`;
+}
+function metricsView(){
+  return `<div class="kicker">DATOS REALES</div><h2 style="font-size:31px;letter-spacing:-1.4px;margin:6px 0">Tu operación.</h2><p style="margin:0;color:var(--muted);font-size:12px">Resumen calculado con información de PostgreSQL.</p><div class="metric-grid" style="margin-top:14px">${[['Clientes',backendStats.clientes],['Conversaciones',backendStats.conversaciones],['Productos',backendStats.productos],['Turnos',backendStats.turnos]].map(m=>`<div class="metric"><div style="font-size:10px;color:var(--muted);font-weight:800">${m[0]}</div><div class="m-num">${Number(m[1]||0).toLocaleString('es-AR')}</div><div class="delta">● Sincronizado</div></div>`).join('')}</div><div class="section-head"><h3>Productos disponibles</h3><span>${backendProducts.length}</span></div><div class="list">${backendProducts.length?backendProducts.map(p=>`<div class="order"><div class="order-top"><div><div class="order-id">PRODUCTO</div><strong>${escapeHtml(p.nombre||'Producto')}</strong></div><span class="tag green">${p.activo===false?'Inactivo':'Activo'}</span></div><div class="order-meta"><span class="tag">${money(Number(p.precio||0))}</span><span class="tag">Stock ${Number(p.stock||0)}</span></div></div>`).join(''):`<div class="notice"><strong>Sin productos.</strong><p>El catálogo de la empresa todavía está vacío.</p></div>`}</div><div class="section-head"><h3>Turnos registrados</h3><span>${backendTurnos.length}</span></div><div class="list">${backendTurnos.length?backendTurnos.slice(0,5).map(t=>`<div class="order"><div class="order-top"><div><div class="order-id">TURNO</div><strong>${escapeHtml(t.fecha||'Sin fecha')} ${escapeHtml(t.hora||'')}</strong></div><span class="tag">${escapeHtml(t.estado||'pendiente')}</span></div></div>`).join(''):`<div class="notice"><strong>No hay turnos registrados.</strong></div>`}</div>`;
+}
+function clientesView(){
+  const total = backendClientes.length;
+  const conversaciones = backendConversaciones.length;
+
+  return `<div class="kicker">CLIENTES</div>
+    <div class="welcome">
+      <div><h2 style="font-size:31px;letter-spacing:-1.4px;margin:6px 0">Tus clientes.</h2>
+      <p style="margin:0;color:var(--muted);font-size:12px">Información y conversaciones almacenadas en PostgreSQL.</p></div>
+      <span class="status-chip">● ${total} clientes</span>
+    </div>
+
+    <div class="hero-metrics">
+      <div class="stat-card"><div class="label">CLIENTES</div><div class="big-num">${Number(total).toLocaleString('es-AR')}</div><div class="delta">Base sincronizada</div></div>
+      <div class="stat-card"><div class="label">MENSAJES CARGADOS</div><div class="big-num">${Number(conversaciones).toLocaleString('es-AR')}</div><div class="delta">Últimos 200 registros</div></div>
+    </div>
+
+    <div class="section-head"><h3>Clientes registrados</h3><span>${total}</span></div>
+    <div class="list">
+      ${total ? backendClientes.map(c => {
+        const n = c.nombre || c.telefono || `Cliente #${c.id}`;
+        return `<button class="order client-open" data-client="${c.id}" style="width:100%;text-align:left">
+          <div class="order-top">
+            <div><div class="order-id">CLIENTE #${c.id}</div><strong>${escapeHtml(n)}</strong></div>
+            <span class="tag green">${escapeHtml(String(c.conversaciones || 0))} mensajes</span>
+          </div>
+          <div class="order-meta"><span class="tag">${escapeHtml(c.telefono || 'Sin identificador')}</span><span class="tag">Alta ${escapeHtml(formatDate(c.creado_en))}</span></div>
+        </button>`;
+      }).join('') : `<div class="notice"><strong>No hay clientes registrados.</strong><p>Los clientes aparecerán cuando WEBOT reciba conversaciones para esta empresa.</p></div>`}
+    </div>`;
+}
+
+function formatDate(value){
+  if(!value) return '—';
+  const d = new Date(value);
+  if(Number.isNaN(d.getTime())) return String(value);
+  return d.toLocaleDateString('es-AR');
+}
+
+async function openClientConversation(clienteId){
+  try {
+    const conversaciones = await loadClientConversation(clienteId);
+    const cliente = backendClientes.find(c => String(c.id) === String(clienteId));
+    const nombre = cliente?.nombre || cliente?.telefono || `Cliente #${clienteId}`;
+
+    document.getElementById('content').innerHTML = `
+      <div class="kicker">CONVERSACIÓN</div>
+      <div class="welcome">
+        <div><h2 style="font-size:31px;letter-spacing:-1.4px;margin:6px 0">${escapeHtml(nombre)}</h2>
+        <p style="margin:0;color:var(--muted);font-size:12px">${escapeHtml(cliente?.telefono || 'Sin teléfono')}</p></div>
+      </div>
+      <div class="section-head"><h3>Historial</h3><span>${conversaciones.length} mensajes</span></div>
+      <div class="console" style="min-height:auto">
+        <div class="chat">
+          ${conversaciones.length ? conversaciones.map(m => {
+            const isUser = String(m.rol).toLowerCase() === 'user';
+            return `<div class="bubble ${isUser ? 'user' : 'bot'}">${escapeHtml(m.mensaje || '').replace(/\n/g,'<br>')}</div>`;
+          }).join('') : `<div class="notice"><strong>Sin conversaciones.</strong><p>Este cliente todavía no tiene mensajes registrados.</p></div>`}
+        </div>
+      </div>
+      <button class="ghost" id="backClients" style="width:100%;margin-top:18px">Volver a clientes</button>`;
+
+    document.getElementById('backClients').onclick = () => { state.view='clientes'; render(); };
+  } catch(e) {
+    toast(e.message || 'No se pudo cargar la conversación');
+  }
+}
+
+function toolsView(){return `<div class="kicker">DATOS DEL NEGOCIO</div><h2 style="font-size:31px;letter-spacing:-1.4px;margin:6px 0">Todo conectado.</h2><p style="margin:0;color:var(--muted);font-size:12px">Estos datos vienen del backend central y están asociados a tu empresa.</p><div class="tools-grid" style="margin-top:15px"><div class="tool-card"><div class="tool-icon">▦</div><h4>Productos</h4><p>${backendProducts.length} productos cargados en PostgreSQL.</p><div class="tool-row"><button class="smallbtn" id="productsRefresh">Actualizar</button></div></div><div class="tool-card"><div class="tool-icon">◷</div><h4>Turnos</h4><p>${backendTurnos.length} turnos registrados.</p><div class="tool-row"><button class="smallbtn" id="turnosRefresh">Actualizar</button></div></div><div class="tool-card"><div class="tool-icon">✦</div><h4>Base de conocimiento</h4><p>${state.config.business_knowledge?'Conocimiento cargado y guardado en backend.':'Todavía no cargaste conocimiento.'}</p><div class="tool-row"><button class="smallbtn" id="pdfBtn">Subir PDF</button></div></div><div class="tool-card"><div class="tool-icon">⚙</div><h4>Configuración</h4><p>Los cambios de tono, agenda, pago y derivación quedan persistidos.</p><div class="tool-row"><button class="smallbtn" data-go="setup">Editar</button></div></div></div><div class="section-head"><h3>Estado de sincronización</h3><span>WEBOT</span></div><div class="guide-card"><div class="check-list"><div class="check"><input type="checkbox" checked disabled><span>PostgreSQL conectado.</span></div><div class="check"><input type="checkbox" checked disabled><span>Sesión autenticada.</span></div><div class="check"><input type="checkbox" checked disabled><span>Productos y turnos consultados desde backend.</span></div><div class="check"><input type="checkbox" checked disabled><span>Proyectos y documentos vinculados por usuario.</span></div></div></div>`}
+function surveyView(){
+ const q=[
+ ['¿Qué quieres mejorar primero?',['Automatizar la atención','Vender más','Responder más rápido','Ordenar consultas']],
+ ['¿Dónde quieres usar Webot IA?',['WhatsApp','Instagram','Web / sitio','Correo electrónico']],
+ ['¿Qué función te resulta más valiosa?',['Bot IA 24/7','Seguimiento automático','Alertas y derivación humana','Métricas del negocio']],
+ ['¿Qué tan fácil te resultó comenzar?',['Muy fácil','Fácil','Intermedio','Difícil']]
+ ];
+ const qi=state.surveyStep||0, answers=state.surveyAnswers||[[],[],[],[]];
+ return `<div class="kicker">ENCUESTA · ${qi+1} DE 4</div><div class="survey-progress">${[0,1,2,3].map(i=>`<span class="survey-step-dot ${i<=qi?'active':''}"></span>`).join('')}</div>
+ <h2 style="font-size:36px;letter-spacing:-1.5px;margin:6px 0">${q[qi][0]}</h2><p style="margin:0;color:var(--muted);font-size:16px;line-height:1.55">Puedes seleccionar más de una respuesta.</p>
+ <div class="check-list" style="margin-top:16px">${q[qi][1].map((x,i)=>`<label class="check survey-option ${answers[qi].includes(i)?'selected':''}"><input type="checkbox" name="surveyMulti" value="${i}" ${answers[qi].includes(i)?'checked':''}><span>${x}</span></label>`).join('')}</div>
+ <button class="primary" style="width:100%;margin-top:18px" id="saveSurvey">${qi<3?'Siguiente':'Finalizar encuesta'}</button>`;
+}
+function openModal(title,desc,primary,secondary){const m=document.getElementById('modal');m.classList.remove('hidden');m.innerHTML=`<div class="sheet"><div style="width:42px;height:5px;background:#2A2A2A;border-radius:99px;margin:0 auto 17px"></div><h3>${title}</h3><p>${desc}</p><div class="row"><button class="ghost" id="modalClose">${secondary}</button><button class="primary" id="modalPrimary">${primary}</button></div></div>`;m.onclick=e=>{if(e.target===m)m.classList.add('hidden')};document.getElementById('modalClose').onclick=()=>m.classList.add('hidden');document.getElementById('modalPrimary').onclick=()=>{m.classList.add('hidden');toast('Acción preparada')};}
+function escapeHtml(s){return String(s||'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]))}function escapeAttr(s){return escapeHtml(s)}
+function turnosView(){
+  const today=new Date().toISOString().slice(0,10);
+  const clientes=backendClientes||[];
+  const turnos=backendTurnos||[];
+  return `<div class="kicker">AGENDA REAL</div>
+  <h2 style="font-size:31px;letter-spacing:-1.4px;margin:6px 0">Turnos</h2>
+  <p style="margin:0;color:var(--muted);font-size:12px">Reservas y estados conectados directamente con PostgreSQL.</p>
+
+  <div class="guide-card" style="margin-top:15px">
+    <div class="section-head" style="margin-top:0"><h3>Nuevo turno</h3><span>WEBOT</span></div>
+    ${clientes.length ? `
+      <div class="field"><label>CLIENTE</label>
+        <select id="turnoCliente">
+          ${clientes.map(c=>`<option value="${c.id}">${escapeHtml(c.nombre||c.telefono||('Cliente #'+c.id))}</option>`).join('')}
+        </select>
+      </div>
+      <div class="hero-metrics" style="margin-top:0">
+        <div class="field"><label>FECHA</label><input id="turnoFecha" type="date" value="${today}"></div>
+        <div class="field"><label>HORA</label><input id="turnoHora" type="time" value="09:00"></div>
+      </div>
+      <button class="primary" id="crearTurnoBtn" style="width:100%;margin-top:6px">Reservar turno</button>
+    ` : `<div class="notice"><strong>No hay clientes.</strong><p>Primero necesitás registrar al menos un cliente para crear un turno.</p></div>`}
+  </div>
+
+  <div class="section-head"><h3>Turnos registrados</h3><button class="smallbtn" id="turnosReload">Actualizar</button></div>
+  <div class="list">
+    ${turnos.length ? turnos.map(t=>{
+      const cliente=t.cliente_nombre||t.cliente_telefono||('Cliente #'+t.cliente_id);
+      const estado=String(t.estado||'pendiente');
+      return `<div class="order">
+        <div class="order-top">
+          <div><div class="order-id">${escapeHtml(cliente)}</div><strong>${escapeHtml(t.fecha||'Sin fecha')} · ${escapeHtml(String(t.hora||'').slice(0,5))}</strong></div>
+          <span class="tag ${estado.toLowerCase()==='confirmado'?'green':''}">${escapeHtml(estado)}</span>
+        </div>
+        <div class="order-meta">
+          <span class="tag">Turno #${t.id}</span>
+          <select class="turnoEstadoSelect" data-turno-id="${t.id}" style="max-width:180px">
+            ${['pendiente','confirmado','cancelado','completado'].map(e=>`<option value="${e}" ${e===estado?'selected':''}>${e}</option>`).join('')}
+          </select>
+          <button class="smallbtn turnoGuardarEstado" data-turno-id="${t.id}">Guardar estado</button>
+        </div>
+      </div>`;
+    }).join('') : `<div class="notice"><strong>No hay turnos registrados.</strong><p>Los nuevos turnos aparecerán acá automáticamente.</p></div>`}
+  </div>`;
+}
+
+async function crearTurnoDesdePanel(){
+  const clienteId=Number(document.getElementById('turnoCliente')?.value);
+  const fecha=document.getElementById('turnoFecha')?.value;
+  const hora=document.getElementById('turnoHora')?.value;
+  if(!Number.isInteger(clienteId)||!fecha||!hora) return toast('Completá cliente, fecha y hora');
+  const btn=document.getElementById('crearTurnoBtn');
+  try{
+    btn.disabled=true; btn.textContent='Reservando...';
+    await webotApi('/api/turnos',{method:'POST',body:JSON.stringify({clienteId,fecha,hora})});
+    await loadRealData();
+    render();
+    toast('Turno reservado correctamente');
+  }catch(e){toast(e.message||'No se pudo reservar el turno');}
+  finally{if(btn){btn.disabled=false;btn.textContent='Reservar turno';}}
+}
+
+async function actualizarTurnoDesdePanel(turnoId,estado,btn){
+  try{
+    if(btn){btn.disabled=true;btn.textContent='Guardando...';}
+    await webotApi(`/api/turnos/${encodeURIComponent(turnoId)}`,{method:'PATCH',body:JSON.stringify({estado})});
+    await loadRealData();
+    render();
+    toast('Estado actualizado');
+  }catch(e){toast(e.message||'No se pudo actualizar el turno');}
+  finally{if(btn){btn.disabled=false;btn.textContent='Guardar estado';}}
+}
+
+function bindView(){
+ const crearTurnoBtn=document.getElementById('crearTurnoBtn');if(crearTurnoBtn)crearTurnoBtn.onclick=crearTurnoDesdePanel;
+ const turnosReload=document.getElementById('turnosReload');if(turnosReload)turnosReload.onclick=async()=>{try{await loadRealData();render();toast('Turnos actualizados')}catch(e){toast(e.message||'No se pudo actualizar')}};
+ document.querySelectorAll('.turnoGuardarEstado').forEach(btn=>btn.onclick=()=>{const sel=document.querySelector(`.turnoEstadoSelect[data-turno-id="${btn.dataset.turnoId}"]`);actualizarTurnoDesdePanel(Number(btn.dataset.turnoId),sel?.value,btn)});
+ document.querySelectorAll('[data-go]').forEach(b=>b.onclick=()=>{state.view=b.dataset.go;render()});
+ document.querySelectorAll('.client-open').forEach(b=>b.onclick=()=>openClientConversation(b.dataset.client));
+ const botToggle=document.getElementById('botToggle');if(botToggle)botToggle.onclick=async()=>{state.botOn=!state.botOn;state.config.pause_bot=!state.botOn;try{await saveEmpresaConfig()}catch(e){}render();toast(state.botOn?'Bot activado':'Bot pausado')};
+ const pause=document.getElementById('pauseHuman');if(pause)pause.onclick=()=>{state.humanPaused=!state.humanPaused;render();toast(state.humanPaused?'Intervención humana activa por 30 min':'IA retomó la atención')};
+const send = document.getElementById('sendMsg');
+
+if (send) {
+  send.onclick = async () => {
+    const input = document.getElementById('chatInput');
+    const chat = document.querySelector('.chat');
+
+    if (!input || !chat) return;
+
+    const mensaje = input.value.trim();
+
+    if (!mensaje) return;
+
+    // Mostrar mensaje del usuario
+    chat.insertAdjacentHTML(
+      'beforeend',
+      `<div class="bubble user">${escapeHtml(mensaje)}</div>`
+    );
+
+    input.value = '';
+    send.disabled = true;
+    send.textContent = '...';
+
+    // Crear/recuperar identificador del cliente
+    let idCliente = localStorage.getItem('webot_cliente_id');
+
+    if (!idCliente) {
+      idCliente =
+        'web-' +
+        Date.now() +
+        '-' +
+        Math.random().toString(36).substring(2, 8);
+
+      localStorage.setItem(
+        'webot_cliente_id',
+        idCliente
+      );
+    }
+
+    // Mostrar indicador
+    chat.insertAdjacentHTML(
+      'beforeend',
+      `<div class="bubble bot" id="webot-typing">Escribiendo...</div>`
+    );
+
+    try {
+      const response = await fetch(
+        `${WEBOT_API_URL}/api/chat`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            empresaId: WEBOT_EMPRESA_ID,
+            idCliente: idCliente,
+            mensaje: mensaje
+          })
+        }
+      );
+
+      const data = await response.json();
+
+      const typing = document.getElementById(
+        'webot-typing'
+      );
+
+      if (typing) {
+        typing.remove();
+      }
+
+      if (!response.ok || data.status !== 'ok') {
+        throw new Error(
+          data.message || 'Error al comunicarse con WEBOT'
+        );
+      }
+
+      // Mostrar respuesta real de WEBOT
+      chat.insertAdjacentHTML(
+        'beforeend',
+        `<div class="bubble bot">${escapeHtml(data.respuesta).replace(/\n/g, '<br>')}</div>`
+      );
+
+      chat.scrollTop = chat.scrollHeight;
+
+    } catch (error) {
+
+      console.error(
+        'Error conectando con WEBOT:',
+        error
+      );
+
+      const typing = document.getElementById(
+        'webot-typing'
+      );
+
+      if (typing) {
+        typing.remove();
+      }
+
+      chat.insertAdjacentHTML(
+        'beforeend',
+        `<div class="bubble bot">
+          No pude conectarme con WEBOT en este momento. 
+          Intentá nuevamente en unos segundos.
+        </div>`
+      );
+
+    } finally {
+      send.disabled = false;
+      send.textContent = 'Enviar';
+      input.focus();
+    }
+  };
+}
+ const productsRefresh=document.getElementById('productsRefresh');if(productsRefresh)productsRefresh.onclick=async()=>{try{await loadRealData();render();toast('Productos y turnos actualizados')}catch(e){toast(e.message||'No se pudo actualizar')}}; const turnosRefresh=document.getElementById('turnosRefresh');if(turnosRefresh)turnosRefresh.onclick=async()=>{try{await loadRealData();render();toast('Turnos actualizados')}catch(e){toast(e.message||'No se pudo actualizar')}}; const pdf=document.getElementById('pdfBtn');const pdf2=document.getElementById('pdfBtnWizard');if(pdf)pdf.onclick=()=>document.getElementById('pdfInput').click();if(pdf2)pdf2.onclick=()=>document.getElementById('pdfInput').click();
+ const agenda=document.getElementById('agendaBtn');if(agenda)agenda.onclick=()=>openModal('Agenda y reservas','La interfaz usa el link de agenda definido en tu configuración y queda lista para conectarse al endpoint de reservas.','Configurar agenda','Cerrar');
+ const email=document.getElementById('emailBtn');if(email)email.onclick=()=>openModal('Seguimiento por correo','Monitorea secuencias, envíos y respuestas automáticas para recuperar prospectos.','Abrir seguimiento','Cerrar');
+ const alerts=document.getElementById('alertsBtn');if(alerts)alerts.onclick=()=>openModal('Alertas críticas','Recibe una notificación cuando un cliente pida una persona o cuando ocurra una acción prioritaria.','Activar alertas','Cerrar');
+ const billing=document.getElementById('billingBtn');if(billing)billing.onclick=()=>openModal('Suscripción activa','Plan '+state.plan+'. Próximo vencimiento: 15 de septiembre de 2026. El aviso se mostrará dentro de la app antes de la fecha.','Entendido','Cerrar');
+ const retest=document.getElementById('retestBot');if(retest)retest.onclick=()=>{state.view='bot';render();toast('Listo para probar')}; const saveConfigNow=document.getElementById('saveConfigNow');if(saveConfigNow)saveConfigNow.onclick=async()=>{try{saveConfigNow.disabled=true;saveConfigNow.textContent='Guardando...';await saveEmpresaConfig();toast('Configuración guardada')}catch(e){toast(e.message||'No se pudo guardar')}finally{saveConfigNow.disabled=false;saveConfigNow.textContent='Guardar configuración'}};
+ const back=document.getElementById('setupBack');if(back)back.onclick=()=>{if(state.setupStep>0){saveSetupStep();state.setupStep--;render()}};
+ const next=document.getElementById('setupNext');if(next)next.onclick=async()=>{if(state.setupStep===0&&!state.config.rubro){toast('Elige un rubro');return}saveSetupStep();if(state.setupStep<4){state.setupStep++;render()}else{const checks=['chk1','chk2','chk3','chk4'].every(id=>document.getElementById(id)?.checked);const core=state.businessName.trim()&&state.config.business_knowledge.trim().length>=25&&state.config.human_takeover_keywords.length>0;if(!checks){toast('Completá las 4 validaciones');return}if(!core){toast('Falta nombre, conocimiento o regla humana');return}try{next.disabled=true;next.textContent='Guardando...';await saveEmpresaConfig();state.setupStep=5;state.setupDone=true;render();toast('Configuración guardada en WEBOT')}catch(e){toast(e.message||'No se pudo guardar la configuración')}finally{next.disabled=false;next.textContent='Validar y dejar listo'}}};
+ document.querySelectorAll('[data-rubro]').forEach(b=>b.onclick=()=>{state.config.rubro=b.dataset.rubro;applyRubro(b.dataset.rubro);render()});
+}
+function applyRubro(key){const r=rubros.find(x=>x[0]===key);if(r)state.config.qualification_fields=r[3];}
+function saveSetupStep(){if(document.getElementById('businessName'))state.businessName=document.getElementById('businessName').value.trim()||'Tu negocio';if(document.getElementById('tone'))state.config.tone=document.getElementById('tone').value;if(document.getElementById('bizKnowledge'))state.config.business_knowledge=document.getElementById('bizKnowledge').value.trim();if(document.getElementById('booking'))state.config.booking_url=document.getElementById('booking').value.trim();if(document.getElementById('payment'))state.config.payment_url=document.getElementById('payment').value.trim();if(document.getElementById('humanKeys'))state.config.human_takeover_keywords=document.getElementById('humanKeys').value.split(',').map(x=>x.trim()).filter(Boolean)}
+
+function saveLocale(){
+  const country=document.getElementById('countryInput')?.value.trim()||'';
+  const currency=document.getElementById('currencyInput')?.value.trim()||'';
+  if(!country){toast('Escribe el país de operación');document.getElementById('countryInput')?.focus();return false}
+  if(!currency){toast('Escribe la moneda de operación');document.getElementById('currencyInput')?.focus();return false}
+  state.country=country;state.currency=currency;
+  localStorage.setItem('webot_locale',JSON.stringify({country,currency}));
+  return true;
+}
+function loadLocale(){
+  try{const saved=JSON.parse(localStorage.getItem('webot_locale')||'null');
+    if(saved?.country&&saved?.currency){state.country=saved.country;state.currency=saved.currency;return true}
+  }catch(e){}
+  return false;
+}
+
+// Navegación inicial
+const codeBox=document.getElementById('codeBox');for(let i=0;i<6;i++){const inp=document.createElement('input');inp.maxLength=1;inp.inputMode='text';inp.autocomplete='one-time-code';inp.oninput=()=>{if(inp.value&&i<5)codeBox.children[i+1].focus()};codeBox.appendChild(inp)}
+
+document.getElementById('saveLocale').onclick=()=>{
+  if(!saveLocale())return;
+  setScreen('onboarding');renderOnboard();
+};
+if(loadLocale()){
+  const ci=document.getElementById('countryInput'),mi=document.getElementById('currencyInput');
+  if(ci)ci.value=state.country;
+  if(mi)mi.value=state.currency;
+}
+
+document.getElementById('themeDay').onclick=()=>{document.body.classList.add('theme-day');document.getElementById('themeDay').classList.add('active');document.getElementById('themeNight').classList.remove('active')};document.getElementById('themeNight').onclick=()=>{document.body.classList.remove('theme-day');document.getElementById('themeNight').classList.add('active');document.getElementById('themeDay').classList.remove('active')};document.addEventListener('click',e=>{if(e.target&&e.target.id==='finishSurvey'){state.view='home';render();toast('Bienvenido a tu panel')}});document.querySelectorAll('.navbtn').forEach(b=>b.onclick=()=>{state.view=b.dataset.view;render();window.scrollTo({top:0,behavior:'smooth'})});
+document.getElementById('nextOn').onclick=()=>{if(state.onboarding<onboard.length-1){state.onboarding++;renderOnboard()}else setScreen('auth')};document.getElementById('backOn').onclick=()=>{if(state.onboarding>0){state.onboarding--;renderOnboard()}};document.getElementById('skipOnboard').onclick=()=>setScreen('auth');
+document.getElementById('activate').onclick=()=>{setScreen('auth');setTimeout(()=>document.querySelector('#activationCodeBox input')?.focus(),0)};document.getElementById('demo').onclick=()=>{setScreen('app');render();if(!state.surveyDone)openSurvey();toast('Demo activada')};document.getElementById('profileBtn').onclick=()=>openModal('Cuenta del negocio','Identidad, plan, canales y preferencias. Las credenciales y claves internas nunca se muestran en pantalla.','Editar','Cerrar');
+function openSurvey(){
+ state.surveyStep=0;state.surveyAnswers=[[],[],[],[]];state.view='survey';
+ const renderSurvey=()=>{document.getElementById('content').innerHTML=surveyView();activeNav();
+ document.querySelectorAll('[name=surveyMulti]').forEach(x=>x.onchange=()=>{const a=state.surveyAnswers[state.surveyStep],v=Number(x.value);if(x.checked&&!a.includes(v))a.push(v);if(!x.checked){const ix=a.indexOf(v);if(ix>=0)a.splice(ix,1)}x.closest('.survey-option').classList.toggle('selected',x.checked)});
+ document.getElementById('saveSurvey').onclick=()=>{if(!state.surveyAnswers[state.surveyStep].length){toast('Selecciona al menos una respuesta');return}/* La valoración de Google Play es opcional. */if(state.surveyStep<3){state.surveyStep++;renderSurvey();return}state.surveyDone=true;document.getElementById('content').innerHTML=thankYouView();document.querySelectorAll('.navbtn').forEach(b=>b.classList.remove('active'))}};
+ renderSurvey();
+}
+function thankYouView(){return `<div class="kicker">¡LISTO!</div><div class="guide-card" style="margin-top:12px;text-align:center;padding:30px"><div style="font-size:64px;animation:rocketFloat 3s infinite">♥</div><h2 style="font-size:40px;line-height:1.05;margin:14px 0">Gracias por confiar en Webot IA.</h2><p style="font-size:18px;line-height:1.65;color:var(--muted)">Sabemos que Webot IA potencia los negocios y queremos acompañarte en esta nueva aventura. Estamos para ayudarte a aprovechar cada oportunidad, automatizar tu operación y hacer crecer tu negocio.</p><button class="primary" id="finishSurvey" style="width:100%;margin-top:18px">Entrar a mi panel</button></div>`}
+const pdfInput=document.getElementById('pdfInput');pdfInput.addEventListener('change',e=>{const f=e.target.files[0];if(!f)return;state.config.business_knowledge=state.config.business_knowledge||('Archivo incorporado: '+f.name);toast('PDF incorporado a la base de conocimiento')});
+ const splashPercent=document.querySelector('.load-percent b');if(splashPercent){let splashStart=performance.now();const updateSplash=now=>{const pct=Math.min(100,Math.round(((now-splashStart)/2600)*100));splashPercent.textContent=pct+'%';if(pct<100)requestAnimationFrame(updateSplash)};requestAnimationFrame(updateSplash)}
+setTimeout(()=>{if(loadLocale()){setScreen('onboarding');renderOnboard()}else setScreen('countrySetup')},5000);
+</script>
+
+<!-- WEBOT BACKEND: autenticación y sesión -->
+<script>
+const WEBOT_API_URL = "";
+const WEBOT_EMPRESA_ID = 1;
+const WEBOT_TOKEN_KEY = "webot_auth_token";
+
+// Modo de prueba: /?nuevo=1 fuerza el flujo de nuevo usuario.
+if (new URLSearchParams(window.location.search).get("nuevo") === "1") {
+  localStorage.removeItem(WEBOT_TOKEN_KEY);
+}
+
+let backendUser = null;
+let backendProfile = null;
+let backendProjects = [];
+let backendDocuments = [];
+let backendStats = { clientes: 0, conversaciones: 0, turnos: 0, productos: 0 };
+let backendProducts = [];
+let backendTurnos = [];
+let backendClientes = [];
+let backendConversaciones = [];
+
+async function webotApi(path, options = {}) {
+  const headers = {
+    "Content-Type": "application/json",
+    ...(options.headers || {})
+  };
+  const token = localStorage.getItem(WEBOT_TOKEN_KEY);
+  if (token) headers.Authorization = `Bearer ${token}`;
+
+  const response = await fetch(`${WEBOT_API_URL}${path}`, {
+    ...options,
+    headers
+  });
+
+  const data = await response.json().catch(() => ({}));
+  if (!response.ok || data.status !== "ok") {
+    throw new Error(data.message || "Error de comunicación con WEBOT");
+  }
+  return data;
+}
+
+async function checkActivationCode(code) {
+  if (!/^\d{6}$/.test(code)) {
+    throw new Error("El código debe tener exactamente 6 números");
+  }
+  return await webotApi("/api/auth/verificar-codigo", {
+    method: "POST",
+    body: JSON.stringify({ codigo: code })
+  });
+}
+
+async function registerWithActivation(name, email, password, code) {
+  return await webotApi("/api/auth/registro", {
+    method: "POST",
+    body: JSON.stringify({
+      nombre: name.trim(),
+      email: email.trim(),
+      password,
+      codigo: code
+    })
+  });
+}
+
+async function loadAuthorizedProjects() {
+  const data = await webotApi("/api/proyectos");
+  backendProjects = data.proyectos || [];
+  return backendProjects;
+}
+
+async function loadProjectDocuments(projectId) {
+  const data = await webotApi(`/api/proyectos/${encodeURIComponent(projectId)}/documentos`);
+  backendDocuments = data.documentos || [];
+  return backendDocuments;
+}
+
+async function loadRealData() {
+  const [resumen, productos, turnos] = await Promise.all([
+    webotApi('/api/resumen'),
+    webotApi('/api/productos'),
+    webotApi('/api/turnos')
+  ]);
+
+  backendStats = resumen.estadisticas || backendStats;
+  backendProducts = productos.productos || [];
+  backendTurnos = turnos.turnos || [];
+
+  return { backendStats, backendProducts, backendTurnos };
+}
+
+async function loadRealClientsAndConversations() {
+  const [clientes, conversaciones] = await Promise.all([
+    webotApi('/api/clientes'),
+    webotApi('/api/conversaciones?limite=200')
+  ]);
+
+  backendClientes = clientes.clientes || [];
+  backendConversaciones = conversaciones.conversaciones || [];
+
+  return { backendClientes, backendConversaciones };
+}
+
+async function loadClientConversation(clienteId) {
+  const data = await webotApi(`/api/conversaciones/cliente/${encodeURIComponent(clienteId)}`);
+  return data.conversaciones || [];
+}
+
+async function loadEmpresaConfig() {
+  const data = await webotApi('/api/config');
+  const config = data.config || {};
+  if (data.empresa?.nombre) state.businessName = data.empresa.nombre;
+  if (config.rubro) state.config.rubro = config.rubro;
+  if (config.tono) state.config.tone = config.tono;
+  if (typeof config.conocimiento === 'string') state.config.business_knowledge = config.conocimiento;
+  if (Array.isArray(config.campos_calificacion) && config.campos_calificacion.length) state.config.qualification_fields = config.campos_calificacion;
+  if (typeof config.link_agenda === 'string') state.config.booking_url = config.link_agenda;
+  if (typeof config.link_pago === 'string') state.config.payment_url = config.link_pago;
+  if (Array.isArray(config.palabras_derivacion) && config.palabras_derivacion.length) state.config.human_takeover_keywords = config.palabras_derivacion;
+  if (typeof config.bot_pausado === 'boolean') state.config.pause_bot = config.bot_pausado;
+  state.botOn = !state.config.pause_bot;
+  return data;
+}
+
+async function saveEmpresaConfig() {
+  return await webotApi('/api/config', {
+    method: 'PUT',
+    body: JSON.stringify({
+      nombre_negocio: state.businessName,
+      rubro: state.config.rubro,
+      tono: state.config.tone,
+      conocimiento: state.config.business_knowledge,
+      campos_calificacion: state.config.qualification_fields,
+      link_agenda: state.config.booking_url,
+      link_pago: state.config.payment_url,
+      palabras_derivacion: state.config.human_takeover_keywords,
+      bot_pausado: !!state.config.pause_bot
+    })
+  });
+}
+
+async function loginReal(email, password) {
+  const data = await webotApi("/api/auth/login", {
+    method: "POST",
+    body: JSON.stringify({
+      email: email.trim(),
+      password
+    })
+  });
+
+  localStorage.setItem(WEBOT_TOKEN_KEY, data.token);
+  backendUser = data.usuario;
+  backendProfile = {
+    id: data.usuario.id,
+    full_name: data.usuario.nombre,
+    role: "cliente",
+    organization_id: data.usuario.empresaId
+  };
+
+  await loadAuthorizedProjects();
+  await loadEmpresaConfig();
+  await loadRealData();
+  await loadRealClientsAndConversations();
+  backendDocuments = [];
+
+  setScreen("app");
+  state.view = "home";
+  render();
+  return data;
+}
+
+async function restoreSession() {
+  const token = localStorage.getItem(WEBOT_TOKEN_KEY);
+  if (!token) return false;
+
+  try {
+    const data = await webotApi("/api/auth/me");
+    backendUser = data.usuario;
+    backendProfile = {
+      id: data.usuario.id,
+      full_name: data.usuario.nombre,
+      role: "cliente",
+      organization_id: data.usuario.empresaId
+    };
+
+    await loadAuthorizedProjects();
+    await loadEmpresaConfig();
+    await loadRealData();
+    await loadRealClientsAndConversations();
+    backendDocuments = [];
+
+    setScreen("app");
+    state.view = "home";
+    render();
+    return true;
+  } catch (error) {
+    localStorage.removeItem(WEBOT_TOKEN_KEY);
+    backendUser = null;
+    backendProfile = null;
+    backendProjects = [];
+    backendDocuments = [];
+    return false;
+  }
+}
+
+function backendLogout() {
+  localStorage.removeItem(WEBOT_TOKEN_KEY);
+  backendUser = null;
+  backendProfile = null;
+  backendProjects = [];
+  backendDocuments = [];
+  backendClientes = [];
+  backendConversaciones = [];
+}
+
+/* ===== VISTA REAL ===== */
+const originalHomeView = homeView;
+homeView = function () {
+  const nombre = backendProfile?.full_name || backendUser?.nombre || "Cliente";
+  const firstProduct = backendProducts[0];
+
+  return `
+    <div class="welcome">
+      <div>
+        <div class="kicker">SESIÓN WEBOT · CLIENTE</div>
+        <h2>${escapeHtml(nombre)}</h2>
+      </div>
+      <span class="status-chip">● Sesión activa</span>
+    </div>
+
+    <div class="notice">
+      <strong>Datos reales conectados.</strong>
+      <p>Este panel está leyendo la información de tu empresa directamente desde PostgreSQL.</p>
+    </div>
+
+    <div class="hero-metrics">
+      <div class="stat-card">
+        <div class="label">CLIENTES</div>
+        <div class="big-num">${Number(backendStats.clientes || 0).toLocaleString('es-AR')}</div>
+        <div class="delta">Base de clientes</div>
+      </div>
+      <div class="stat-card">
+        <div class="label">CONVERSACIONES</div>
+        <div class="big-num">${Number(backendStats.conversaciones || 0).toLocaleString('es-AR')}</div>
+        <div class="delta">Registradas en WEBOT</div>
+      </div>
+    </div>
+
+    <div class="hero-metrics">
+      <div class="stat-card">
+        <div class="label">PRODUCTOS</div>
+        <div class="big-num">${Number(backendStats.productos || backendProducts.length || 0).toLocaleString('es-AR')}</div>
+        <div class="delta">Catálogo conectado</div>
+      </div>
+      <div class="stat-card">
+        <div class="label">TURNOS</div>
+        <div class="big-num">${Number(backendStats.turnos || backendTurnos.length || 0).toLocaleString('es-AR')}</div>
+        <div class="delta">Agenda sincronizada</div>
+      </div>
+    </div>
+
+    <div class="section-head"><h3>Producto disponible</h3><span>${backendProducts.length}</span></div>
+    ${firstProduct ? `
+      <div class="order">
+        <div class="order-top">
+          <div><div class="order-id">PRODUCTO</div><strong>${escapeHtml(firstProduct.nombre || 'Producto')}</strong></div>
+          <span class="tag green">${firstProduct.activo === false ? 'Inactivo' : 'Activo'}</span>
+        </div>
+        <div class="order-meta">
+          <span class="tag">Precio ${money(Number(firstProduct.precio || 0))}</span>
+          <span class="tag">Stock ${Number(firstProduct.stock || 0)}</span>
+        </div>
+      </div>` : `
+      <div class="notice"><strong>No hay productos cargados.</strong><p>Agregá productos desde PostgreSQL para que WEBOT pueda utilizarlos.</p></div>`}
+
+    <div class="section-head"><h3>Proyectos habilitados</h3><span>${backendProjects.length}</span></div>
+    <div class="list">
+      ${backendProjects.length ? backendProjects.map(p => `
+        <button class="order project-open" data-project="${p.id}">
+          <div class="order-top">
+            <div><div class="order-id">PROYECTO AUTORIZADO</div><strong>${escapeHtml(p.nombre || "Proyecto")}</strong></div>
+            <span class="tag green">${escapeHtml(p.estado || "activo")}</span>
+          </div>
+        </button>
+      `).join("") : `
+        <div class="notice"><strong>No tenés proyectos habilitados.</strong><p>Los proyectos aparecerán cuando estén vinculados a tu usuario.</p></div>`}
+    </div>
+  `;
+};
+
+async function openRealProject(projectId) {
+  try {
+    await loadProjectDocuments(projectId);
+    const project = backendProjects.find(p => String(p.id) === String(projectId));
+    const nombre = project?.nombre || "Proyecto";
+
+    document.getElementById("content").innerHTML = `
+      <div class="kicker">PROYECTO HABILITADO</div>
+      <div class="welcome">
+        <div>
+          <h2 style="font-size:31px;letter-spacing:-1.4px;margin:6px 0">${escapeHtml(nombre)}</h2>
+          <span style="font-size:11px;color:var(--muted)">${escapeHtml(project?.estado || "Activo")}</span>
+        </div>
+      </div>
+
+      <div class="section-head"><h3>Documentos</h3><span>${backendDocuments.length}</span></div>
+      <div class="list">
+        ${backendDocuments.length ? backendDocuments.map(d => `
+          <div class="order">
+            <div class="order-top">
+              <div>
+                <div class="order-id">${escapeHtml(d.categoria || "GENERAL")}</div>
+                <strong>${escapeHtml(d.titulo || "Documento")}</strong>
+              </div>
+              <span class="tag green">${escapeHtml(d.estado || "activo")}</span>
+            </div>
+            <div class="order-meta">
+              <span class="tag">Versión ${escapeHtml(String(d.version_actual ?? 1))}</span>
+              ${d.url ? `<a class="smallbtn" href="${escapeAttr(d.url)}" target="_blank" rel="noopener">Abrir</a>` : ``}
+            </div>
+          </div>
+        `).join("") : `
+          <div class="notice">
+            <strong>Sin documentos disponibles.</strong>
+            <p>Este proyecto todavía no tiene documentos cargados.</p>
+          </div>
+        `}
+      </div>
+
+      <button class="ghost" id="backProjects" style="width:100%;margin-top:18px">Volver a proyectos</button>
+    `;
+
+    document.getElementById("backProjects").onclick = () => {
+      state.view = "home";
+      render();
+    };
+  } catch (e) {
+    toast(e.message || "No se pudo cargar el proyecto");
+  }
+}
+
+/* ===== LOGIN / REGISTRO ===== */
+function renderSixCodeBoxes(container, onChange) {
+  container.innerHTML = Array.from({ length: 6 }, (_, i) =>
+    `<input class="activation-digit" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="1" aria-label="Dígito ${i + 1}" autocomplete="one-time-code">`
+  ).join("");
+
+  const inputs = [...container.querySelectorAll(".activation-digit")];
+  const emit = () => onChange(inputs.map(x => x.value.replace(/\D/g, "")).join(""));
+
+  inputs.forEach((input, i) => {
+    input.addEventListener("input", () => {
+      input.value = input.value.replace(/\D/g, "").slice(0, 1);
+      if (input.value && i < inputs.length - 1) inputs[i + 1].focus();
+      emit();
+    });
+
+    input.addEventListener("keydown", e => {
+      if (e.key === "Backspace" && !input.value && i > 0) {
+        inputs[i - 1].focus();
+        inputs[i - 1].value = "";
+        emit();
+      }
+    });
+
+    input.addEventListener("paste", e => {
+      const txt = (e.clipboardData.getData("text") || "").replace(/\D/g, "").slice(0, 6);
+      if (!txt) return;
+      e.preventDefault();
+      txt.split("").forEach((d, n) => {
+        if (inputs[n]) inputs[n].value = d;
+      });
+      inputs[Math.min(txt.length, 6) - 1].focus();
+      emit();
+    });
+  });
+}
+
+window.addEventListener("load", async () => {
+  const authCard = document.querySelector("#auth .auth-card");
+  if (!authCard) return;
+
+  authCard.innerHTML = `
+    <div class="brand-lockup"><div class="logo"></div><div class="brand"><h1>webot IA</h1><small>Acceso seguro por cuenta</small></div></div>
+    <div class="kicker" style="margin-top:25px">ACCESO DE CLIENTE</div>
+    <h2 id="accessTitle">Activá tu cuenta</h2>
+    <p id="accessDesc">Ingresá el código de 6 dígitos que te enviamos. Es válido una sola vez.</p>
+
+    <div id="activationStep">
+      <div class="field">
+        <label>CÓDIGO DE ACTIVACIÓN</label>
+        <div class="code-box" id="activationCodeBox"></div>
+      </div>
+      <button id="validateActivation" class="primary" style="width:100%;margin-top:8px">Validar código</button>
+    </div>
+
+    <div id="registerStep" class="hidden">
+      <div class="notice"><strong>✅ Código válido</strong><p>Ahora creá tu cuenta. El código se consumirá al completar el registro.</p></div>
+      <div class="field"><label>NOMBRE Y APELLIDO</label><input id="registerName" autocomplete="name" placeholder="Tu nombre y apellido"></div>
+      <div class="field"><label>EMAIL</label><input id="registerEmail" type="email" autocomplete="email" placeholder="tu@email.com"></div>
+      <div class="field"><label>CONTRASEÑA</label><input id="registerPassword" type="password" minlength="6" autocomplete="new-password" placeholder="Mínimo 6 caracteres"></div>
+      <button id="createAccount" class="primary" style="width:100%;margin-top:8px">Crear mi cuenta</button>
+    </div>
+
+    <div id="loginStep" class="hidden">
+      <div class="field"><label>EMAIL</label><input id="realEmail" type="email" autocomplete="email" placeholder="tu@email.com"></div>
+      <div class="field"><label>CONTRASEÑA</label><input id="realPassword" type="password" autocomplete="current-password" placeholder="••••••••"></div>
+      <button id="realLogin" class="primary" style="width:100%;margin-top:8px">Entrar</button>
+    </div>
+
+    <button id="showLogin" class="demo-link" type="button">Ya tengo cuenta · Iniciar sesión</button>
+    <div class="trust"><span class="tiny-dot"></span> Código único · cuenta protegida</div>`;
+
+  let currentCode = "";
+  renderSixCodeBoxes(document.getElementById("activationCodeBox"), code => {
+    currentCode = code;
+  });
+
+  async function validateCode() {
+    if (!/^\d{6}$/.test(currentCode)) {
+      return toast("El código debe tener exactamente 6 números");
+    }
+
+    const btn = document.getElementById("validateActivation");
+    try {
+      btn.disabled = true;
+      btn.textContent = "Validando...";
+      await checkActivationCode(currentCode);
+
+      document.getElementById("activationStep").classList.add("hidden");
+      document.getElementById("registerStep").classList.remove("hidden");
+      document.getElementById("accessTitle").textContent = "Creá tu cuenta";
+      document.getElementById("accessDesc").textContent = "Completá tus datos para activar tu acceso a WEBOT.";
+      document.getElementById("registerName").focus();
+    } catch (e) {
+      toast(e.message || "Código inválido");
+    } finally {
+      btn.disabled = false;
+      btn.textContent = "Validar código";
+    }
+  }
+
+  document.getElementById("validateActivation").onclick = validateCode;
+
+  document.getElementById("createAccount").onclick = async () => {
+    const name = document.getElementById("registerName").value.trim();
+    const email = document.getElementById("registerEmail").value.trim();
+    const password = document.getElementById("registerPassword").value;
+
+    if (!/^\d{6}$/.test(currentCode)) return toast("El código debe tener exactamente 6 números");
+    if (!name) return toast("Ingresá tu nombre y apellido");
+    if (!email) return toast("Ingresá tu email");
+    if (password.length < 6) return toast("La contraseña debe tener al menos 6 caracteres");
+
+    const btn = document.getElementById("createAccount");
+    try {
+      btn.disabled = true;
+      btn.textContent = "Creando cuenta...";
+      await registerWithActivation(name, email, password, currentCode);
+
+      document.getElementById("registerStep").classList.add("hidden");
+      document.getElementById("loginStep").classList.remove("hidden");
+      document.getElementById("showLogin").classList.add("hidden");
+      document.getElementById("accessTitle").textContent = "Cuenta creada";
+      document.getElementById("accessDesc").textContent = "Ahora ingresá con tu email y contraseña.";
+      document.getElementById("realEmail").value = email;
+      document.getElementById("realPassword").focus();
+      toast("Cuenta creada correctamente");
+    } catch (e) {
+      toast(e.message || "No se pudo crear la cuenta");
+    } finally {
+      btn.disabled = false;
+      btn.textContent = "Crear mi cuenta";
+    }
+  };
+
+  function showLogin() {
+    document.getElementById("activationStep").classList.add("hidden");
+    document.getElementById("registerStep").classList.add("hidden");
+    document.getElementById("loginStep").classList.remove("hidden");
+    document.getElementById("accessTitle").textContent = "Iniciá sesión";
+    document.getElementById("accessDesc").textContent = "Entrá con el email y contraseña que registraste.";
+    document.getElementById("realEmail").focus();
+  }
+
+  document.getElementById("showLogin").onclick = showLogin;
+
+  document.getElementById("realLogin").onclick = async () => {
+    const email = document.getElementById("realEmail").value.trim();
+    const password = document.getElementById("realPassword").value;
+    if (!email || !password) return toast("Completá email y contraseña");
+
+    const btn = document.getElementById("realLogin");
+    try {
+      btn.disabled = true;
+      btn.textContent = "Ingresando...";
+      await loginReal(email, password);
+      toast("Sesión iniciada");
+    } catch (e) {
+      toast(e.message || "No se pudo iniciar sesión");
+    } finally {
+      btn.disabled = false;
+      btn.textContent = "Entrar";
+    }
+  };
+
+  // Si existe una sesión válida, entra a la aplicación.
+  // El parámetro ?nuevo=1 la borra antes para probar como usuario nuevo.
+  await restoreSession();
+});
+</script>
+
+</body>
+</html>
